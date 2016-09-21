@@ -7,7 +7,7 @@
 `Moji`<br/>
 `Toshi`<br/>
 
-今はSujiが少しだけできてる
+今はSujiが少しだけできてる<br/>
 次のメソッドでは、どんな値でも入れていい
 ```ruby
 p Suji.zenkaku(300)
@@ -26,7 +26,6 @@ p Suji.type?(10)
 そのあたりはまだです<br/>
 
 文字列をひらがな、カタカナ、半角カタカタ、ローマ字のいずれかに変換できます（漢字は使えません）<br/>
-多くのメソッドは`Moji`というクラスに備わっています。
 
 ```ruby
 mojiretsu = "おすし　は　おいしい　です　ね。"
@@ -34,4 +33,4 @@ Moji.romaji(mojiretsu)
 #=> "osushi wa oishii desu ne."
 ```
 
-# このリンクを参考に → https://ja.wikipedia.org/wiki/%E5%A4%A7%E5%AD%97_(%E6%95%B0%E5%AD%97)
+#<a href="https://ja.wikipedia.org/wiki/%E5%A4%A7%E5%AD%97_(%E6%95%B0%E5%AD%97)" target="_blank">このリンク</a>を参考にしてください
