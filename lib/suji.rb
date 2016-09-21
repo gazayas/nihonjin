@@ -10,7 +10,11 @@ class Suji
   # 大数の読み方もあればいいかも
 
   def self.hankaku(num)
+    # ここに num = num.to_s で self.type? の１行目の方を消すこと？
     type = self.type?(num)
+    if type == "半角"
+      return num.to_i
+    end
     num = self.converter(num, type, HANKAKU)
     num.to_i
   end
@@ -18,18 +22,27 @@ class Suji
   def self.zenkaku(num)
     num = num.to_s # 半角の場合
     type = self.type?(num)
+    if type == "全角"
+      return num
+    end
     num = self.converter(num, type, ZENKAKU)
   end
 
   def self.kanji(num)
     num = num.to_s
     type = self.type?(num)
+    if type == "漢字"
+      return num
+    end
     num = self.converter(num, type, KANJI)
   end
 
   def self.daiji(num)
     num = num.to_s
     type = self.type?(num)
+    if type == "大字"
+      return num
+    end
     num = self.converter(num, type, DAIJI)
   end
 
