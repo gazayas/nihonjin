@@ -38,4 +38,46 @@ describe Suji do
     end
   end
 
+  context 'kanji_henkanは２桁までうまく動作してること' do
+    it '１桁の数字は漢字に変換されること' do
+      suji = Suji.kanji_henkan("4")
+      expect(suji).to eq "四"
+    end
+    it '"10"は"十"に変換されること' do
+      suji = Suji.kanji_henkan("10")
+      expect(suji).to eq "十"
+    end
+    it '"15"は"十五"に変換されること' do
+      suji = Suji.kanji_henkan("15")
+      expect(suji).to eq "十五"
+    end
+    it '"47"は"四十七"に変換されること' do
+      suji = Suji.kanji_henkan("47")
+      expect(suji).to eq "四十七"
+    end
+  end
+
+  context 'kanji_henkanは３ 桁までうまく動作してること' do
+    it '"100"は"百"に変換されること' do
+      suji = Suji.kanji_henkan("100")
+      expect(suji).to eq "百"
+    end
+    it '"201"は"二百一"に変換されること' do
+      suji = Suji.kanji_henkan("201")
+      expect(suji).to eq "二百一"
+    end
+    it '"310"は"三百十"を返すこと' do
+      suji = Suji.kanji_henkan("310")
+      expect(suji).to eq "三百十"
+    end
+    it '"315"は"三百十五"を返すこと' do
+      suji = Suji.kanji_henkan("315")
+      expect(suji).to eq "三百十五"
+    end
+    it '"447"は"四百四十七"を返すこと' do
+      suji = Suji.kanji_henkan("447")
+      expect(suji).to eq "四百四十七"
+    end
+  end
+
 end
