@@ -56,7 +56,7 @@ class Suji
     num = self.converter(num, type, DAIJI)
   end
 
-  # ユーザが使えるように、"全角"、"漢字"などを返すようにすること
+  # ユーザが使えるように、"全角"、"漢字"などを返すことができるようにすること
   def self.type?(num)
     num = num.to_s # これは要る？気になる
     constants = [HANKAKU, ZENKAKU, KANJI, DAIJI]
@@ -102,6 +102,3 @@ class Suji
   end
 
 end
-
-
-

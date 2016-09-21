@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Suji do
 
-  # 全てのtypeから全てのtypeに変換されるようなテストを書いた方がいいかも知らない（０＿０）大変かもしれないwww
+  
   context 'typeを返すこと' do
     it '整数であって"半角"を返す' do
       type = Suji.type?(47)
@@ -24,7 +24,8 @@ describe Suji do
       type = Suji.type?("肆漆")
     end
   end
-
+  
+  # 全てのtypeから全てのtypeに変換されるようなテストを書いた方がいいかも知らない（０＿０）大変かもしれないwww
   context '全角に変換するテスト' do
     it '半角から変換されること' do
       suji = Suji.zenkaku(47)
