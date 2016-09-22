@@ -212,13 +212,8 @@ class Suji
     thousandth_place = (num[-4] + num[-3] + num[-2] + num[-1])
     thousandth_place = sen(thousandth_place)
 
-
-    # 空の場合も考えないといけない（一億のコードを書いたら）
-    # case の代わりにif文の方がいいかな
-    # sen(num)の「空」の部分を参考にすること
     case num.length
     when 5
-      # ここに普通にunshiftをしていいけど、他のやつでは最初の要素をpopしないと
       num = num.unshift(num[0])
       num[0] = kanji(num[0])
       num = num[0] + "万" + thousandth_place

@@ -61,3 +61,7 @@ Moji.romaji(mojiretsu)
 ###<a href="https://ja.wikipedia.org/wiki/%E5%A4%A7%E5%AD%97_(%E6%95%B0%E5%AD%97)" target="_blank">このリンク</a>を参考にしてください
 
 ## Toshi 年
+
+##しないといけないこと
+テストはあんまり綺麗じゃない<br/>
+一つの方法を決めて分かりやすくて綺麗にすること

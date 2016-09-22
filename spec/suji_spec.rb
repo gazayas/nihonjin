@@ -185,6 +185,11 @@ describe Suji do
       suji = Suji.kanji_henkan(27825672)
       expect(suji).to eq "二千七百八十二万五千六百七十二"
     end
+    it '40000042は"四千万四十二"に変換されること' do
+      suji = Suji.kanji_henkan(40000042)
+      expect(suji).to eq "四千万四十二"
+    end
+
   end
 
 end
