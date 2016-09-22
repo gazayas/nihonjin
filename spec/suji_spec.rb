@@ -154,7 +154,37 @@ describe Suji do
       suji = Suji.kanji_henkan(1200)
       expect(suji).to eq "千二百"
     end
+  end
 
+  context 'kanji_henkanは8桁までうまく動くこと' do
+    it '10000は"一万"に変換されること' do
+      suji = Suji.kanji_henkan(10000)
+      expect(suji).to eq "一万"
+    end
+    it '20000は"二万"に変換されること' do
+      suji = Suji.kanji_henkan(20000)
+      expect(suji).to eq "二万"
+    end
+    it '10001は"一万一"に変換されること' do
+      suji = Suji.kanji_henkan(10001)
+      expect(suji).to eq "一万一"
+    end
+    it '35784は"三万五千七百八十四"に変換されること' do
+      suji = Suji.kanji_henkan(35784)
+      expect(suji).to eq "三万五千七百八十四"
+    end
+    it '735784は"七十三万五千七百八十四"に変換されること' do
+      suji = Suji.kanji_henkan(735784)
+      expect(suji).to eq "七十三万五千七百八十四"
+    end
+    it '9578642"九百五十七万八千六百四十二"に変換されること' do
+      suji = Suji.kanji_henkan(9578642)
+      expect(suji).to eq "九百五十七万八千六百四十二"
+    end
+    it '27825672"二千七百八十二万五千六百七十二"に変換されること' do
+      suji = Suji.kanji_henkan(27825672)
+      expect(suji).to eq "二千七百八十二万五千六百七十二"
+    end
   end
 
 end

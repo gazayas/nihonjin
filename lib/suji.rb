@@ -188,10 +188,14 @@ class Suji
     hundreth_place = hyaku(hundreth_place)
 
     # 次の条件が満たされます
-    if num[0] == "1"
+    # 千、一千、空
+    if num[0] == "1" # 千
       num[0] = "千"
       num = num[0] + hundreth_place
-    else
+    elsif num[0] == "0" # 空
+      num[0] = ""
+      num = num[0] + hundreth_place # num[0]は要らないけど分かりやすくするためです
+    else # 一千など
       num = num.unshift(num[0])
       num[0] = kanji(num[0])
       num[1] = "千"
@@ -204,6 +208,39 @@ class Suji
 
   # ５〜８桁の数字を正しい漢字に変換する
   def self.man(num)
+    num = num.split("")
+    thousandth_place = (num[-4] + num[-3] + num[-2] + num[-1])
+    thousandth_place = sen(thousandth_place)
+
+
+    # 空の場合も考えないといけない（一億のコードを書いたら）
+    # case の代わりにif文の方がいいかな
+    # sen(num)の「空」の部分を参考にすること
+    case num.length
+    when 5
+      # ここに普通にunshiftをしていいけど、他のやつでは最初の要素をpopしないと
+      num = num.unshift(num[0])
+      num[0] = kanji(num[0])
+      num = num[0] + "万" + thousandth_place
+    when 6
+      man_only = num.shift(0) # 最初の要素を削除する
+      man_only = num[0] + num[1]
+      man_tenth_place = ju(man_only)
+      num = man_tenth_place + "万" + thousandth_place
+    when 7
+      2.times { man_only = num.shift(0) }
+      man_only = num[0] + num[1] + num[2]
+      man_hundredth_place = hyaku(man_only)
+      num = man_hundredth_place + "万" + thousandth_place
+    when 8
+      3.times { man_only = num.shift(0) }
+      man_only = num[0] + num[1] + num[2] + num[3]
+      man_thousandth_place = sen(man_only)
+      num = man_thousandth_place + "万" + thousandth_place
+    end
+
+    num
+
   end
 
 end
