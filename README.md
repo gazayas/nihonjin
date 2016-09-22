@@ -20,7 +20,7 @@ p Suji.kanji_henkan(3521)
 p Suji.zenkaku(300)
 #=> "３００"
 p Suji.hankaku("三〇〇")
-#=> 300
+#=> "300"
 
 # kanji_henkanと違って、普通に数字をそのまま漢字に変換する
 p Suji.kanji(800)
