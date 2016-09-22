@@ -73,7 +73,6 @@ class Suji
   end
 
   def self.kanji_henkan(num)
-    
     # どんなタイプであっても変換されるようにする
     num = hankaku(num)
     num = num.to_s
@@ -85,6 +84,8 @@ class Suji
       num = ju(num)
     elsif num.length == 3
       num = hyaku(num)
+    elsif num.length == 4
+      num = sen(num)
     end
   end
 
@@ -108,31 +109,33 @@ class Suji
     num
   end
 
-  # ２桁の数字を正しい漢字の変換する
+  # １〜２桁の数字を正しい漢字に変換する
   def self.ju(num)
     num = num.split("")
-    if num[0] == "1" && num[1] == "0" # 普通に"10"の場合
+
+    # 次の条件が満たされます
+    # （尚、１桁の場合もjuで対応します。空というのは「00」の場合です）
+    # 十、十一、二十、二十一、一、空
+    if num[0] == "1" && num[1] == "0" # 十
       num = "十"
-    elsif num[0] == "1" && num[1] != "0" # "15"などの場合
+    elsif num[0] == "1" && num[1] != "0" # 十一
       num[0] = "十"
       num[1] = kanji(num[1])
-    elsif num[0] == "0" && num[1] != "0" # 101などの場合
-      num[0] = ""
-      num[1] = kanji(num[1])
-    elsif num[0] == "0" && num[1] == "0" # 100などの場合、最後の２桁を丸ごと消す
-      num = ""
-    elsif num.length == 1
-      num = kanji(num[0]) # １桁の場合、普通に漢字に変換する。これをif文の前の方に入れた方がいいかな
-    else # "35"などの場合
+    elsif (num[0] != "0" && num != "1") && num[1] == "0" # 二十
+      num[0] = kanji(num[0])
+      num[1] = "十"
+    elsif (num[0] != "0" && num != "1") && num[1] != "0" # 二十一
       num = num.unshift(num[0])
       num[0] = kanji(num[0])
       num[1] = "十"
-      if num[2] == "0" # もし"30"になっていたら、最後の"0"を消す
-        num[2] = ""
-      else
-        num[2] = kanji(num[2])
-      end
+      num[2] = kanji(num[2])
+    elsif num[0] == "0" && num[1] != "0" # 一
+      num[0] = ""
+      num[1] = kanji(num[1])
+    elsif num[0] == "0" && num[1] == "0" # 空
+      num = ""
     end
+
     new_str = String.new
     if num.instance_of? Array
       num.each do |digit|
@@ -140,39 +143,57 @@ class Suji
       end
       num = new_str
     end
+
     num
+
   end
 
-  # ３桁の数字を正しい漢字の変換する
+  # ３桁の数字を正しい漢字に変換する
   def self.hyaku(num)
-    num = hankaku(num)
-    num = num.to_s
+
     num = num.split("")
     tenth_place = (num[-2] + num[-1])
     tenth_place = ju(tenth_place) # 値によって長さは変わることはあります
-    if num[0] == "1" && num[1] == "0" && num[2] == "0"
-      num = "百"
-    elsif num[0] == "1"
+    # 次の条件が満たされます
+    # 百、二百、空
+    # 尚、「十」の位置以降はju()で計算されますので、先にそのメソッドを呼びます
+    if num[0] == "1" # 百
       num[0] = "百"
-    else
+      num = num[0] + tenth_place
+    elsif num[0] == "0" # 空
+      num[0] = ""
+      num = num[0] + tenth_place
+    elsif (num[0] != "1" && num[0] != "0") # 二百
       num = num.unshift(num[0])
       num[0] = kanji(num[0])
       num[1] = "百"
-      num[2] = kanji(num[2])
+      num = num[0] + num[1] + tenth_place
     end
-    new_str = String.new
-    if num[0] == "百"
-      new_str = num[0] + tenth_place
-    elsif num[0] != "百"
-      new_str = num[0] + num[1] + tenth_place
-    end
-    num = new_str unless num.empty?
+
     num
+
   end
 
-  # ４桁の数字を正しい漢字の変換する
-  # def self.sen(num)
-  # end
+  # ４桁の数字を垂らしい漢字に変換する
+  def self.sen(num)
+    num = num.split("")
+    hundreth_place = (num[-3] + num[-2] + num[-1])
+    hundreth_place = hyaku(hundreth_place)
+
+    # 次の条件が満たされます
+    if num[0] == "1"
+      num[0] = "千"
+      num = num[0] + hundreth_place
+    else
+      num = num.unshift(num[0])
+      num[0] = kanji(num[0])
+      num[1] = "千"
+      num = num[0] + num[1] + hundreth_place
+    end
+
+    num
+
+  end
 
   # ５〜８桁の数字を正しい漢字に変換する
   # def self.man(num)
