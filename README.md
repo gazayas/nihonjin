@@ -17,6 +17,15 @@ p Suji.kanji_henkan(150)
 p Suji.kanji_henkan(3521)
 #=> "三千五百二十一"
 
+# to_iも使えます
+# 尚、上にあるkanji_henkan()が返すような値ではto_iは使えません
+p Suji.to_i("三〇一")
+#=> 301
+p Suji.to_i("３０１")
+#=> 301
+p Suji.to_i("参零壱")
+#=> 301
+
 
 p Suji.zenkaku(300)
 #=> "３００"
@@ -49,4 +58,3 @@ Moji.romaji(mojiretsu)
 ###<a href="https://ja.wikipedia.org/wiki/%E5%A4%A7%E5%AD%97_(%E6%95%B0%E5%AD%97)" target="_blank">このリンク</a>を参考にしてください
 
 ## Toshi 年
-

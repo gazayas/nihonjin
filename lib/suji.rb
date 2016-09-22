@@ -1,6 +1,6 @@
 class Suji
 
-  # カンマ入る時の対応
+  # カンマが入る時の対応
 
   HANKAKU = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
   ZENKAKU = ["０", "１" , "２", "３", "４", "５", "６", "７", "８", "９"]
@@ -19,14 +19,19 @@ class Suji
   }
   # 大数の読み方もあればいいかも
 
+  def self.to_i(num)
+    return num unless !(num.instance_of? Integer)
+    num = hankaku(num)
+    num.to_i
+  end
+
   def self.hankaku(num)
     num = num.to_s
     type = type?(num)
     return num.to_i if type == "半角"
     num = converter(num, type, HANKAKU)
-    # num.to_i # hankakuで特別の戻り値；その他は文字列を返します
   end
-  
+
   def self.zenkaku(num)
     num = num.to_s
     type = type?(num)

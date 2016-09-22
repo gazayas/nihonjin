@@ -2,7 +2,30 @@ require 'spec_helper'
 
 describe Suji do
 
-  
+  # 次は kanji_henkanが返すような値を整数にすること...
+  context 'to_iは整数を返すこと' do
+    it '整数は整数を返すこと' do
+      suji = Suji.to_i(10)
+      expect(suji).to eq 10
+    end
+    it '半角は整数を返すこと' do
+      suji = Suji.to_i("10")
+      expect(suji).to eq 10
+    end
+    it '全角は整数を返すこと' do
+      suji = Suji.to_i("１０")
+      expect(suji).to eq 10
+    end
+    it '漢字は整数を返すこと' do
+      suji = Suji.to_i("七九一")
+      expect(suji).to eq 791
+    end
+    it '大字は整数を返すこと' do
+      suji = Suji.to_i("壱弐参")
+      expect(suji).to eq 123
+    end
+  end
+
   context 'typeを返すこと' do
     it '整数であって"半角"を返す' do
       type = Suji.type?(47)
@@ -24,7 +47,7 @@ describe Suji do
       type = Suji.type?("肆漆")
     end
   end
-  
+
   # 全てのtypeから全てのtypeに変換されるようなテストを書いた方がいいかも知らない（０＿０）大変かもしれないwww
   context '全角に変換するテスト' do
     it '半角から変換されること' do
@@ -33,7 +56,7 @@ describe Suji do
     end
     it '漢字から変換されること' do
       # 漢字のテストを変えないと。。。「四十七」に対応できるように /^十/なら消されないけど、そのほかの場合十は消される
-      suji = Suji.zenkaku("四七") 
+      suji = Suji.zenkaku("四七")
       expect(suji).to eq "４７"
     end
   end
