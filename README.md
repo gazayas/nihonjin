@@ -17,16 +17,6 @@ p Suji.kanji_henkan(150)
 p Suji.kanji_henkan(3521)
 #=> "三千五百二十一"
 
-# to_iも使えます
-# 尚、上にあるkanji_henkan()が返すような値ではto_iは使えません
-p Suji.to_i("三〇一")
-#=> 301
-p Suji.to_i("３０１")
-#=> 301
-p Suji.to_i("参零壱")
-#=> 301
-
-
 p Suji.zenkaku(300)
 #=> "３００"
 p Suji.hankaku("三〇〇")
@@ -39,6 +29,15 @@ p Suji.daiji("三")
 #=> "参"
 p Suji.type?(10)
 #=> "半角"
+
+# to_iも使えます
+# 尚、上にあるkanji_henkan()が返すような値ではto_iは使えません
+p Suji.to_i("三〇一")
+#=> 301
+p Suji.to_i("３０１")
+#=> 301
+p Suji.to_i("参零壱")
+#=> 301
 ```
 
 kanji_henkan() と kanji() の名前を入れ替えるかな</br>
