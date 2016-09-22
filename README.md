@@ -46,4 +46,7 @@ Moji.romaji(mojiretsu)
 #=> "osushi wa oishii desu ne."
 ```
 
-#<a href="https://ja.wikipedia.org/wiki/%E5%A4%A7%E5%AD%97_(%E6%95%B0%E5%AD%97)" target="_blank">このリンク</a>を参考にしてください
+###<a href="https://ja.wikipedia.org/wiki/%E5%A4%A7%E5%AD%97_(%E6%95%B0%E5%AD%97)" target="_blank">このリンク</a>を参考にしてください
+
+## Toshi 年
+
