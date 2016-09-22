@@ -10,18 +10,29 @@
 今はSujiが少しだけできてる<br/>
 次のメソッドでは、どんな値でも入れていい
 ```ruby
+# 今のところは、kanji_henkanは４桁まで変換できます
+p Suji.kanji_henkan(150)
+#=> "百五十"
+p Suji.kanji_henkan(3521)
+#=> "三千五百二十一"
+
+
 p Suji.zenkaku(300)
 #=> "３００"
 p Suji.hankaku("三〇〇")
 #=> 300
-p Suji.kanji(8)
-#=> "八"
+
+# kanji_henkanと違って、普通に数字をそのまま漢字に変換する
+p Suji.kanji(800)
+#=> "八〇〇"
 p Suji.daiji("三")
 #=> "参"
 p Suji.type?(10)
 #=> "半角"
 ```
 
+kanji_henkan() と kanji() の名前を入れ替えるかな</br>
+今のkanji_henkan()はもっと普通に使うかもしれないけど、type()とかでkanji()を使って、それの方は簡潔なのでもこのままでいいか...<br/>
 そして、10,300の場合は「一万三百」とかに変換されるようにしたいです<br/>
 そのあたりはまだです<br/>
 

@@ -86,6 +86,8 @@ class Suji
       num = hyaku(num)
     elsif num.length == 4
       num = sen(num)
+    elsif num.length >= 5 && num.length <= 8
+      num = man(num)
     end
   end
 
@@ -196,7 +198,7 @@ class Suji
   end
 
   # ５〜８桁の数字を正しい漢字に変換する
-  # def self.man(num)
-  # end
+  def self.man(num)
+  end
 
 end
