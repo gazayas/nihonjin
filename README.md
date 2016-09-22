@@ -45,6 +45,8 @@ kanji_henkan() と kanji() の名前を入れ替えるかな</br>
 そして、10,300の場合は「一万三百」とかに変換されるようにしたいです<br/>
 そのあたりはまだです<br/>
 
+<a href="http://www.geocities.jp/f9305710/kazu.html">リンク</a>
+
 ## Moji 文字
 文字列をひらがな、カタカナ、半角カタカタ、ローマ字のいずれかに変換できます（漢字は使えません）<br/>
 
@@ -55,7 +57,5 @@ Moji.romaji(mojiretsu)
 ```
 
 ###<a href="https://ja.wikipedia.org/wiki/%E5%A4%A7%E5%AD%97_(%E6%95%B0%E5%AD%97)" target="_blank">このリンク</a>を参考にしてください
-
-<a href="http://www.geocities.jp/f9305710/kazu.html">これもある</a>
 
 ## Toshi 年
