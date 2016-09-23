@@ -34,8 +34,16 @@ p Suji.kanji(800)
 #=> "八〇〇"
 p Suji.daiji("三")
 #=> "参"
+
 p Suji.type?(10)
 #=> "半角"
+p Suji.type?("１０")
+#=> "全角"
+p Suji.type?("１０")
+#=> "漢字"
+p Suji.type?("壱")
+#=> "大字"
+
 
 # to_iも使えます
 # 尚、上にあるkanji_henkan()が返すような値ではto_iは使えません

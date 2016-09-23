@@ -1,7 +1,5 @@
 class Suji
 
-  # カンマが入る時の対応
-
   HANKAKU = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
   ZENKAKU = ["０", "１" , "２", "３", "４", "５", "６", "７", "８", "９"]
   KANJI = ["〇", "一", "二", "三", "四", "五", "六", "七", "八", "九"]
@@ -17,43 +15,11 @@ class Suji
     1_0000_0000_0000_0000_0000 => "垓",
     1_0000_0000_0000_0000_0000_0000 => "𥝱"
   }
-  # 大数の読み方もあればいいかも
 
-  def self.to_i(num)
-    return num unless !(num.instance_of? Integer)
-    num = hankaku(num)
-    num.to_i
-  end
+  # 大数の読み方もあればいいかな
+  # メソッドの引数にはカンマが入っている時の対応
 
-  def self.hankaku(num)
-    num = num.to_s
-    type = type?(num)
-    return num.to_i if type == "半角"
-    num = converter(num, type, HANKAKU)    
-  end
-
-  def self.zenkaku(num)
-    num = num.to_s
-    type = type?(num)
-    return num if type == "全角"
-    num = converter(num, type, ZENKAKU)
-  end
-
-  def self.kanji(num)
-    num = num.to_s
-    type = type?(num)
-    return num if type == "漢字"
-    num = converter(num, type, KANJI)
-  end
-
-  def self.daiji(num)
-    num = num.to_s
-    type = type?(num)
-    return num if type == "大字"
-    num = converter(num, type, DAIJI)
-  end
-
-  # ユーザが使えるように、"全角"、"漢字"などを返すことができるようにすること
+  # ユーザも使えるようにpublicにしました
   def self.type?(num)
     num = num.to_s
     constants = [HANKAKU, ZENKAKU, KANJI, DAIJI]
@@ -63,6 +29,7 @@ class Suji
         regexp = Regexp.new(constant[n].to_s)
         if num.match(regexp)
           type = constant
+          break
         end
       end
     end
@@ -79,12 +46,41 @@ class Suji
     end
   end
 
+  def self.to_i(num)
+    return num unless !(num.instance_of? Integer)
+    num = hankaku(num)
+    num.to_i
+  end
+
+  def self.hankaku(num)
+    type = type?(num)
+    return num.to_i if type == "半角"
+    num = converter(num, type, HANKAKU)    
+  end
+
+  def self.zenkaku(num)
+    type = type?(num)
+    return num if type == "全角"
+    num = converter(num, type, ZENKAKU)
+  end
+
+  def self.kanji(num)
+    type = type?(num)
+    return num if type == "漢字"
+    num = converter(num, type, KANJI)
+  end
+
+  def self.daiji(num)
+    type = type?(num)
+    return num if type == "大字"
+    num = converter(num, type, DAIJI)
+  end
+
   def self.kanji_henkan(num)
     # どんなタイプであっても変換されるようにする
     num = hankaku(num)
     num = num.to_s
 
-    # そして実際に変換する
     if num.length == 0
       num = ""
     elsif num.length == 1
@@ -109,6 +105,7 @@ class Suji
   private
 
   def self.converter(num, type, result_type)
+    num = num.to_s
     case type
     when "全角"
       type = ZENKAKU
@@ -170,16 +167,15 @@ class Suji
 
     num = num.split("")
     tenth_place = (num[-2] + num[-1])
-    tenth_place = ju(tenth_place) # 値によって長さは変わることはあります
+    tenth_place = ju(tenth_place)
     # 次の条件が満たされます
     # 百、二百、空
-    # 尚、「十」の位置以降はju()で計算されますので、先にそのメソッドを呼びます
+    # 尚、「十」の位置以降はju()で計算されますので、先にそのメソッドを呼んで、戻り値を「百」の尾に連結します
     if num[0] == "1" # 百
       num[0] = "百"
       num = num[0] + tenth_place
-    elsif num[0] == "0" # 空
-      num[0] = ""
-      num = num[0] + tenth_place
+    elsif num[0] == "0" # 空 （num[0]が要らなくなるのでtenth_placeだけをnumに代入します）
+      num = tenth_place
     elsif (num[0] != "1" && num[0] != "0") # 二百
       num = num.unshift(num[0])
       num[0] = kanji(num[0])
@@ -191,20 +187,19 @@ class Suji
 
   end
 
-  # ４桁の数字を垂らしい漢字に変換する
+  # ４桁の数字を正しい漢字に変換する
   def self.sen(num)
     num = num.split("")
     hundreth_place = (num[-3] + num[-2] + num[-1])
     hundreth_place = hyaku(hundreth_place)
 
-    # 次の条件が満たされます
+    # 次の条件が満たされます（hyaku(num)と同じく）
     # 千、一千、空
     if num[0] == "1" # 千
       num[0] = "千"
       num = num[0] + hundreth_place
-    elsif num[0] == "0" # 空
-      num[0] = ""
-      num = num[0] + hundreth_place # num[0]は要らないけど分かりやすくするためです
+    elsif num[0] == "0" # 空（num[0]が要らなくなるのでhundredth_placeだけをnumに代入します）
+      num = hundreth_place
     else # 一千など
       num = num.unshift(num[0])
       num[0] = kanji(num[0])
@@ -225,21 +220,21 @@ class Suji
       if num[0] == "" then place_holder = "" end
       num = num[0] + place_holder + thousandth_place
     when 2
-      place_holder_value_only = num.shift(0)
-      place_holder_value_only = num[0] + num[1]
-      place_holder_tenth_place = ju(place_holder_value_only)
+      place_holder_value = num.shift(0)
+      place_holder_value = num[0] + num[1]
+      place_holder_tenth_place = ju(place_holder_value)
       if place_holder_tenth_place == "" then place_holder = "" end
       num = place_holder_tenth_place + place_holder + thousandth_place
     when 3
-      2.times { place_holder_value_only = num.shift(0) }
-      place_holder_value_only = num[0] + num[1] + num[2]
-      place_holder_hundredth_place = hyaku(place_holder_value_only)
+      2.times { place_holder_value = num.shift(0) }
+      place_holder_value = num[0] + num[1] + num[2]
+      place_holder_hundredth_place = hyaku(place_holder_value)
       if place_holder_hundredth_place == "" then place_holder = "" end
       num = place_holder_hundredth_place + place_holder + thousandth_place
     when 0
-      3.times { place_holder_value_only = num.shift(0) }
-      place_holder_value_only = num[0] + num[1] + num[2] + num[3]
-      place_holder_thousandth_place = sen(place_holder_value_only)
+      3.times { place_holder_value = num.shift(0) }
+      place_holder_value = num[0] + num[1] + num[2] + num[3]
+      place_holder_thousandth_place = sen(place_holder_value)
       if place_holder_thousandth_place == "" then place_holder = "" end
       num = place_holder_thousandth_place + place_holder + thousandth_place
     end
