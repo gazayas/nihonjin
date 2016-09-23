@@ -95,6 +95,8 @@ class Suji
       num = man(num)
     elsif num.length >= 9 && num.length <= 12
       num = oku(num)
+    elsif num.length >= 13 && num.length <= 16
+      num = cho(num)
     end
   end
 
@@ -208,74 +210,63 @@ class Suji
 
   end
 
+  def self.thousandth_place_kanji_converter(num, place_holder, thousandth_place)
+    case num.length % 4
+    when 1
+      num = num.unshift(num[0])
+      num = kanji(num[0])
+      if num[0] == "" then place_holder = "" end
+      num = num[0] + place_holder + thousandth_place
+    when 2
+      place_holder_value_only = num.shift(0)
+      place_holder_value_only = num[0] + num[1]
+      place_holder_tenth_place = ju(place_holder_value_only)
+      if place_holder_tenth_place == "" then place_holder = "" end
+      num = place_holder_tenth_place + place_holder + thousandth_place
+    when 3
+      2.times { place_holder_value_only = num.shift(0) }
+      place_holder_value_only = num[0] + num[1] + num[2]
+      place_holder_hundredth_place = hyaku(place_holder_value_only)
+      if place_holder_hundredth_place == "" then place_holder = "" end
+      num = place_holder_hundredth_place + place_holder + thousandth_place
+    when 0
+      3.times { place_holder_value_only = num.shift(0) }
+      place_holder_value_only = num[0] + num[1] + num[2] + num[3]
+      place_holder_thousandth_place = sen(place_holder_value_only)
+      if place_holder_thousandth_place == "" then place_holder = "" end
+      num = place_holder_thousandth_place + place_holder + thousandth_place
+    end
+    num
+  end
+
   # ５〜８桁の数字を正しい漢字に変換する
   def self.man(num)
     num = num.split("")
     thousandth_place = (num[-4] + num[-3] + num[-2] + num[-1])
     thousandth_place = sen(thousandth_place)
-
     man_holder = "万"
-
-    case num.length
-    when 5
-      num = num.unshift(num[0])
-      num[0] = kanji(num[0])
-      if num[0] == "" then man_holder = "" end # 万以上は空の場合の対応
-      num = num[0] + man_holder + thousandth_place
-    when 6
-      man_only = num.shift(0) # 最初の要素を削除する
-      man_only = num[0] + num[1]
-      man_tenth_place = ju(man_only)
-      if man_tenth_place == "" then man_holder = "" end
-      num = man_tenth_place + man_holder + thousandth_place
-    when 7
-      2.times { man_only = num.shift(0) }
-      man_only = num[0] + num[1] + num[2]
-      man_hundredth_place = hyaku(man_only)
-      if man_hundredth_place == "" then man_holder = "" end
-      num = man_hundredth_place + man_holder + thousandth_place
-    when 8
-      3.times { man_only = num.shift(0) }
-      man_only = num[0] + num[1] + num[2] + num[3]
-      man_thousandth_place = sen(man_only)
-      if man_thousandth_place == "" then man_holder = "" end
-      num = man_thousandth_place + man_holder + thousandth_place
-    end
-
+    num = thousandth_place_kanji_converter(num, "万", thousandth_place)
     num
-
   end
 
   # ９〜１２桁の数字を正しい漢字に変換する
   def self.oku(num)
     num = num.split("")
-    man_place = (num[-8] + num[-7] + num[-6] + num[-5] + num[-4] + num[-3] + num[-2] + num[-1])
+    man_place = (num[-8] + num[-7] + num[-6] + num[-5] +
+                 num[-4] + num[-3] + num[-2] + num[-1])
     man_place = man(man_place)
-
-    case num.length
-    when 9
-      num = num.unshift(num[0])
-      num[0] = kanji(num[0])
-      num = num[0] + "億" + man_place
-    when 10
-      oku_only = num.shift(0)
-      oku_only = num[0] + num[1]
-      oku_tenth_place = ju(oku_only)
-      num = oku_tenth_place + "億" + man_place
-    when 11
-      2.times { oku_only = num.shift(0) }
-      oku_only = num[0] + num[1] + num[2]
-      oku_hundreth_place = hyaku(oku_only)
-      num = oku_hundreth_place + "億" + man_place
-    when 12
-      3.times { oku_only = num.shift(0) }
-      oku_only = num[0] + num[1] + num[2] + num[3]
-      oku_thousandth_place = sen(oku_only)
-      num = oku_thousandth_place + "億" + man_place
-    end
-
+    num = thousandth_place_kanji_converter(num, "億", man_place)
     num
-
   end
 
+  def self.cho(num)
+    num = num.split("")
+    oku_place = (num[-12] + num[-11] + num[-10] + num[-9] +
+                 num[-8] + num[-7] + num[-6] + num[-5] +
+                 num[-4] + num[-3] + num[-2] + num[-1])
+    oku_place = oku(oku_place)
+    num = thousandth_place_kanji_converter(num, "兆", oku_place)
+    num
+  end
+  
 end

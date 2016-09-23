@@ -206,4 +206,11 @@ describe Suji do
     end
   end
 
+  context 'kanji_henkan  12' do
+    it '1_123_123_123_123_123' do
+      suji = Suji.kanji_henkan(1_123_123_123_123_123)
+      expect(suji).to eq "千百二十三兆千二百三十一億二千三百十二万三千百二十三"
+    end
+  end
+
 end
