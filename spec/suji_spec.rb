@@ -219,4 +219,11 @@ describe Suji do
     end
   end
 
+  context 'kanji_henkanは20桁までうまく動くこと' do
+    it '56_004_223_746_273_373_565は"五千六百京四千二百二十三兆七千四百六十二億七千三百三十七万三千五百六十五"に変換されること' do
+      suji = Suji.kanji_henkan(56_004_223_746_273_373_565)
+      expect(suji).to eq "五千六百京四千二百二十三兆七千四百六十二億七千三百三十七万三千五百六十五"
+    end
+  end
+
 end

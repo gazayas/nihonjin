@@ -101,6 +101,8 @@ class Suji
       num = oku(num)
     elsif num.length >= 13 && num.length <= 16
       num = cho(num)
+    elsif num.length >= 17 && num.length <= 20
+      num = kei(num)
     end
   end
 
@@ -214,6 +216,7 @@ class Suji
 
   end
 
+  # ju(), hyaku(), sen() ができたので、その処理を１つにまとめて、「万」とか「億」とかで使えるようにしました
   def self.thousandth_place_kanji_converter(num, place_holder, thousandth_place)
     case num.length % 4
     when 1
@@ -263,6 +266,7 @@ class Suji
     num
   end
 
+  # １３〜１６桁の数字を正しい漢字に変換する
   def self.cho(num)
     num = num.split("")
     oku_place = (num[-12] + num[-11] + num[-10] + num[-9] +
@@ -270,6 +274,18 @@ class Suji
                  num[-4] + num[-3] + num[-2] + num[-1])
     oku_place = oku(oku_place)
     num = thousandth_place_kanji_converter(num, "兆", oku_place)
+    num
+  end
+
+  # １７〜２０桁の数字を正しい漢字に変換する
+  def self.kei(num)
+    num = num.split("")
+    cho_place = (num[-16] + num[-15] + num[-14] + num[-13] +
+                 num[-12] + num[-11] + num[-10] + num[-9] +
+                 num[-8] + num[-7] + num[-6] + num[-5] +
+                 num[-4] + num[-3] + num[-2] + num[-1])
+    cho_place = cho(cho_place)
+    num = thousandth_place_kanji_converter(num, "京", cho_place)
     num
   end
   
