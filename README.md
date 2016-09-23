@@ -11,13 +11,15 @@
 今はSujiが少しだけできてる<br/>
 次のメソッドでは、どんな値でも入れていい
 ```ruby
-# 今のところは、kanji_henkanは８桁まで変換できます
+# 今のところは、kanji_henkanは12桁まで変換できます
 p Suji.kanji_henkan(150)
 #=> "百五十"
 p Suji.kanji_henkan(3521)
 #=> "三千五百二十一"
 p Suji.kanji_henkan(27825672)
 #=> "二千七百八十二万五千六百七十二"
+p Suji.kanji_henkan(623_367_289_348)
+#=> "六千二百三十三億六千七百二十八万九千三百四十八"
 
 
 p Suji.zenkaku(300)
@@ -64,6 +66,7 @@ Moji.romaji(mojiretsu)
 
 ##しないといけないこと
 Suji.kanji_henkan()が呼ぶ def man(num), def oku(num) とかは大体同じメソッドなので、<br/>
-def cho(num), def kei(num) を書くなら、その前にリファクトリングして同じメソッドを呼ぶようにしよう<br/>
+def cho(num), def kei(num) を書くなら、その前にリファクトリングして同じメソッドを呼ぶようにしよう<br/><br/>
+
 テストはあんまり綺麗じゃない<br/>
 一つの方法を決めて分かりやすくて綺麗にすること
