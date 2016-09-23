@@ -63,5 +63,7 @@ Moji.romaji(mojiretsu)
 ## Toshi 年
 
 ##しないといけないこと
+Suji.kanji_henkan()が呼ぶ def man(num), def oku(num) とかは大体同じメソッドなので、<br/>
+def cho(num), def kei(num) を書くなら、その前にリファクトリングして同じメソッドを呼ぶようにしよう<br/>
 テストはあんまり綺麗じゃない<br/>
 一つの方法を決めて分かりやすくて綺麗にすること

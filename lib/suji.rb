@@ -93,6 +93,8 @@ class Suji
       num = sen(num)
     elsif num.length >= 5 && num.length <= 8
       num = man(num)
+    elsif num.length >= 9 && num.length <= 12
+      num = oku(num)
     end
   end
 
@@ -212,26 +214,64 @@ class Suji
     thousandth_place = (num[-4] + num[-3] + num[-2] + num[-1])
     thousandth_place = sen(thousandth_place)
 
+    man_holder = "万"
+
     case num.length
     when 5
       num = num.unshift(num[0])
       num[0] = kanji(num[0])
-      num = num[0] + "万" + thousandth_place
+      if num[0] == "" then man_holder = "" end # 万以上は空の場合の対応
+      num = num[0] + man_holder + thousandth_place
     when 6
       man_only = num.shift(0) # 最初の要素を削除する
       man_only = num[0] + num[1]
       man_tenth_place = ju(man_only)
-      num = man_tenth_place + "万" + thousandth_place
+      if man_tenth_place == "" then man_holder = "" end
+      num = man_tenth_place + man_holder + thousandth_place
     when 7
       2.times { man_only = num.shift(0) }
       man_only = num[0] + num[1] + num[2]
       man_hundredth_place = hyaku(man_only)
-      num = man_hundredth_place + "万" + thousandth_place
+      if man_hundredth_place == "" then man_holder = "" end
+      num = man_hundredth_place + man_holder + thousandth_place
     when 8
       3.times { man_only = num.shift(0) }
       man_only = num[0] + num[1] + num[2] + num[3]
       man_thousandth_place = sen(man_only)
-      num = man_thousandth_place + "万" + thousandth_place
+      if man_thousandth_place == "" then man_holder = "" end
+      num = man_thousandth_place + man_holder + thousandth_place
+    end
+
+    num
+
+  end
+
+  # ９〜１２桁の数字を正しい漢字に変換する
+  def self.oku(num)
+    num = num.split("")
+    man_place = (num[-8] + num[-7] + num[-6] + num[-5] + num[-4] + num[-3] + num[-2] + num[-1])
+    man_place = man(man_place)
+
+    case num.length
+    when 9
+      num = num.unshift(num[0])
+      num[0] = kanji(num[0])
+      num = num[0] + "億" + man_place
+    when 10
+      oku_only = num.shift(0)
+      oku_only = num[0] + num[1]
+      oku_tenth_place = ju(oku_only)
+      num = oku_tenth_place + "億" + man_place
+    when 11
+      2.times { oku_only = num.shift(0) }
+      oku_only = num[0] + num[1] + num[2]
+      oku_hundreth_place = hyaku(oku_only)
+      num = oku_hundreth_place + "億" + man_place
+    when 12
+      3.times { oku_only = num.shift(0) }
+      oku_only = num[0] + num[1] + num[2] + num[3]
+      oku_thousandth_place = sen(oku_only)
+      num = oku_thousandth_place + "億" + man_place
     end
 
     num

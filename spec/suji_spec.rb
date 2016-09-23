@@ -189,7 +189,21 @@ describe Suji do
       suji = Suji.kanji_henkan(40000042)
       expect(suji).to eq "四千万四十二"
     end
+  end
 
+  context 'kanji_henkanは12桁までうまく動くこと' do
+    it '100_000_000は"一億"に変換されること' do
+      suji = Suji.kanji_henkan(100000000)
+      expect(suji).to eq "一億"
+    end
+    it '112_320_871_956は"千百二十三億二千八十七万千九百五十六"に変換されること' do
+      suji = Suji.kanji_henkan(112_320_871_956)
+      expect(suji).to eq "千百二十三億二千八十七万千九百五十六"
+    end
+    it '623_367_289_348は"六千二百三十三億六千七百二十八万九千三百四十八"に変換されること' do
+      suji = Suji.kanji_henkan(623_367_289_348)
+      expect(suji).to eq "六千二百三十三億六千七百二十八万九千三百四十八"
+    end
   end
 
 end
