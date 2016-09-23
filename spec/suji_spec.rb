@@ -65,9 +65,15 @@ describe Suji do
 
 
   # kanji_henkanのテストをちょっと考え直さないとダメだなww
-
-
   context 'kanji_henkanは２桁までうまく動作してること' do
+    it '0桁の数字（空の文字列）はからの文字列を返すこと' do
+      suji = Suji.kanji_henkan("")
+      expect(suji).to eq ""
+    end
+    it '0は"〇"に変換されること' do
+      suji = Suji.kanji_henkan(0)
+      expect(suji).to eq "〇"
+    end
     it '１桁の数字は漢字に変換されること' do
       suji = Suji.kanji_henkan("4")
       expect(suji).to eq "四"
@@ -206,8 +212,8 @@ describe Suji do
     end
   end
 
-  context 'kanji_henkan  12' do
-    it '1_123_123_123_123_123' do
+  context 'kanji_henkanは16桁までうまく動くこと' do
+    it '1_123_123_123_123_123は"千百二十三兆千二百三十一億二千三百十二万三千百二十三"に変換されること' do
       suji = Suji.kanji_henkan(1_123_123_123_123_123)
       expect(suji).to eq "千百二十三兆千二百三十一億二千三百十二万三千百二十三"
     end

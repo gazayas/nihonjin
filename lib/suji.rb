@@ -29,7 +29,7 @@ class Suji
     num = num.to_s
     type = type?(num)
     return num.to_i if type == "半角"
-    num = converter(num, type, HANKAKU)
+    num = converter(num, type, HANKAKU)    
   end
 
   def self.zenkaku(num)
@@ -72,8 +72,10 @@ class Suji
       "漢字"
     elsif type == DAIJI
       "大字"
-    else
+    elsif type == HANKAKU
       "半角"
+    else
+      ""
     end
   end
 
@@ -83,7 +85,9 @@ class Suji
     num = num.to_s
 
     # そして実際に変換する
-    if num.length == 1
+    if num.length == 0
+      num = ""
+    elsif num.length == 1
       num = kanji(num)
     elsif num.length == 2
       num = ju(num)
