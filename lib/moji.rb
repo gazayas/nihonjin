@@ -28,6 +28,31 @@ class Moji
     di: "でぃ"
   }
 
+    KATAKANA = {
+    a: "ア", i: "イ", u: "ウ", e: "エ", o: "オ",
+    ka: "カ", ki: "キ", ku: "ク", ke: "ケ", ko: "コ",
+    sa: "サ", shi: "シ", su: "ス", se: "セ", so: "ソ",
+    ta: "タ", chi: "チ", tsu: "ツ", te: "テ", to: "ト",
+    na: "ナ", ni: "ニ", nu: "ヌ", ne: "ネ", no: "ノ",
+    ha: "ハ", hi: "ヒ", fu: "フ", he: "ヘ", ho: "ホ",
+    ma: "マ", mi: "ミ", mu: "ム", me: "メ", mo: "モ",
+    ya: "ヤ",           yu: "ユ",          yo: "ヨ",
+    ra: "ラ", ri: "リ", ru: "ル", re: "レ", ro: "ロ",
+    wa: "ワ", wi: "ヰ",           we: "ヱ", wo: "ヲ",
+    n: "ン",
+    
+    v: "ヴ",
+    ga: "ガ", gi: "ギ", gu: "グ", ge: "ゲ", go: "ゴ",
+    za: "ザ", ji: "ジ", zu: "ズ", ze: "ゼ", zo: "ゾ",
+    da: "ダ", ji2: "ジ", dzu: "ヅ", de: "デ", do: "ド",
+    ba: "バ", bi: "ビ", bu: "ブ", be: "ベ", bo: "ボ",
+
+    pa: "パ", pi: "ピ", pu: "プ", pe: "ペ", po: "ポ",
+
+    fa: "ファ", fi: "フィ", fe: "フェ", fo: "フォ"
+    di: "ディ"
+  }
+
   # インスタンスを作らずにMojiのクラスが使えるようにしたいから、self.を追加しました
   def self.kuhaku(str, option=nil)
     if option == :zenkaku
