@@ -2,6 +2,11 @@ class Moji
 
   # 特別な文字：
   # ji2: "ぢ", fa: "ファ", fi: "フィ", fe: "フェ", fo: "フォ", ディ: "di"
+  # 小さい方も追加したです
+  # 「ヰ」と「ヱ」の半角はないらしいです：
+  # http://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q1024671115sad
+  # https://ja.wikipedia.org/wiki/JIS_X_0201
+  # その代り、半角の「エ」と「イ」を使ったらいいかな
 
   HIRAGANA = {
     a: "あ", i: "い", u: "う", e: "え", o: "お",
@@ -24,7 +29,7 @@ class Moji
 
     pa: "ぱ", pi: "ぴ", pu: "ぷ", pe: "ぺ", po: "ぽ",
 
-    fa: "ふぁ", fi: "ふぃ", fe: "ふぇ", fo: "ふぉ"
+    fa: "ふぁ", fi: "ふぃ", fe: "ふぇ", fo: "ふぉ",
     di: "でぃ"
   }
 
@@ -49,8 +54,33 @@ class Moji
 
     pa: "パ", pi: "ピ", pu: "プ", pe: "ペ", po: "ポ",
 
-    fa: "ファ", fi: "フィ", fe: "フェ", fo: "フォ"
+    fa: "ファ", fi: "フィ", fe: "フェ", fo: "フォ",
     di: "ディ"
+  }
+
+  KATAKANA_HANKAKU = {
+    a: "ｱ", i: "ｲ", u: "ｳ", e: "ｴ", o: "ｵ",
+    ka: "ｶ", ki: "ｷ", ku: "ｸ", ke: "ｹ", ko: "ｺ",
+    sa: "ｻ", shi: "ｼ", su: "ｽ", se: "ｾ", so: "ｿ",
+    ta: "ﾀ", chi: "ﾁ", tsu: "ﾂ", te: "ﾃ", to: "ﾄ",
+    na: "ﾅ", ni: "ﾆ", nu: "ﾇ", ne: "ﾈ", no: "ﾉ",
+    ha: "ﾊ", hi: "ﾋ", fu: "ﾌ", he: "ﾍ", ho: "ﾎ",
+    ma: "ﾏ", mi: "ﾐ", mu: "ﾑ", me: "ﾒ", mo: "ﾓ",
+    ya: "ﾔ",           yu: "ﾕ",          yo: "ﾖ",
+    ra: "ﾗ", ri: "ﾘ", ru: "ﾙ", re: "ﾚ", ro: "ﾛ",
+    wa: "ﾜ", wi: "",           we: "", wo: "ｦ",
+    n: "",
+    
+    v: "ｳﾞ",
+    ga: "ｶﾞ", gi: "ｷﾞ", gu: "ｸﾞ", ge: "ｹﾞ", go: "ｺﾞ",
+    za: "ｻﾞ", ji: "ｼﾞ", zu: "ｽﾞ", ze: "ｾﾞ", zo: "ｿﾞ",
+    da: "ﾀﾞ", ji2: "ﾁﾞ", dzu: "ﾂﾞ", de: "ﾃﾞ", do: "ﾄﾞ",
+    ba: "ﾊﾞ", bi: "ﾋﾞ", bu: "ﾌﾞ", be: "ﾍﾞ", bo: "ﾎﾞ",
+
+    pa: "ﾊﾟ", pi: "ﾋﾟ", pu: "ﾌﾟ", pe: "ﾍﾟ", po: "ﾎﾟ",
+
+    fa: "ﾌｧ", fi: "ﾌｨ", fe: "ﾌｪ", fo: "ﾌｫ",
+    di: "ﾃﾞｨ"
   }
 
   # インスタンスを作らずにMojiのクラスが使えるようにしたいから、self.を追加しました
@@ -76,4 +106,9 @@ class Moji
   def self.romaji(str)
   end
 
+end
+
+
+for moji in Moji::KATAKANA
+  print moji[1]
 end
