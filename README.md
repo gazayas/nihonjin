@@ -65,6 +65,8 @@ p Suji.to_i("参零壱")
 文字列をひらがな、カタカナ、半角カタカタ、ローマ字のいずれかに変換できます（漢字は使えません）<br/>
 
 ```ruby
+Ruby on Railsで、`<span class="fg">水</span>`を書いてhoverしたら、ふりがなが出るようにしたい
+
 mojiretsu = "おすし　は　おいしい　です　ね。"
 Moji.romaji(mojiretsu)
 #=> "osushi wa oishii desu ne."
