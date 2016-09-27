@@ -17,4 +17,14 @@ describe Moji do
       end
     end
   end
+
+  describe '#hiragana(str)' do
+    context 'ローマ字からひらがなに変換されること' do
+      it '織田信長の名言をひらがなに' do
+        str = Moji.hiragana('ningen no gojuunen ha hakanai mono da')
+        expect(str).to eq "にんげん　の　ごじゅうねん　は　はかない　もの　だ"
+      end
+    end
+  end
+
 end

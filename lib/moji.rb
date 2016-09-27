@@ -8,8 +8,11 @@ class Moji
   # https://ja.wikipedia.org/wiki/JIS_X_0201
   # その代り、半角の「エ」と「イ」を使ったらいいかな
 
+  # 最後に「あ」〜「う」を置く理由は正規表現のためです
+  # また、「じゃ」〜「じょ」が最初の方にあるのもそのため
+  # 小さい文字も入れないとダメだ（「っ」や「ゅ」とか）
   HIRAGANA = {
-    a: "あ", i: "い", u: "う", e: "え", o: "お",
+    ja: "じゃ",         ju: "じゅ",         jo: "じょ",
     ka: "か", ki: "き", ku: "く", ke: "け", ko: "こ",
     sa: "さ", shi: "し", su: "す", se: "せ", so: "そ",
     ta: "た", chi: "ち", tsu: "つ", te: "て", to: "と",
@@ -30,11 +33,11 @@ class Moji
     pa: "ぱ", pi: "ぴ", pu: "ぷ", pe: "ぺ", po: "ぽ",
 
     fa: "ふぁ", fi: "ふぃ", fe: "ふぇ", fo: "ふぉ",
-    di: "でぃ"
+    di: "でぃ",
+    a: "あ", i: "い", u: "う", e: "え", o: "お"
   }
 
     KATAKANA = {
-    a: "ア", i: "イ", u: "ウ", e: "エ", o: "オ",
     ka: "カ", ki: "キ", ku: "ク", ke: "ケ", ko: "コ",
     sa: "サ", shi: "シ", su: "ス", se: "セ", so: "ソ",
     ta: "タ", chi: "チ", tsu: "ツ", te: "テ", to: "ト",
@@ -55,11 +58,12 @@ class Moji
     pa: "パ", pi: "ピ", pu: "プ", pe: "ペ", po: "ポ",
 
     fa: "ファ", fi: "フィ", fe: "フェ", fo: "フォ",
-    di: "ディ"
+    di: "ディ",
+    a: "ア", i: "イ", u: "ウ", e: "エ", o: "オ"
   }
 
   KATAKANA_HANKAKU = {
-    a: "ｱ", i: "ｲ", u: "ｳ", e: "ｴ", o: "ｵ",
+    
     ka: "ｶ", ki: "ｷ", ku: "ｸ", ke: "ｹ", ko: "ｺ",
     sa: "ｻ", shi: "ｼ", su: "ｽ", se: "ｾ", so: "ｿ",
     ta: "ﾀ", chi: "ﾁ", tsu: "ﾂ", te: "ﾃ", to: "ﾄ",
@@ -80,19 +84,38 @@ class Moji
     pa: "ﾊﾟ", pi: "ﾋﾟ", pu: "ﾌﾟ", pe: "ﾍﾟ", po: "ﾎﾟ",
 
     fa: "ﾌｧ", fi: "ﾌｨ", fe: "ﾌｪ", fo: "ﾌｫ",
-    di: "ﾃﾞｨ"
+    di: "ﾃﾞｨ",
+    a: "ｱ", i: "ｲ", u: "ｳ", e: "ｴ", o: "ｵ"
   }
 
   # インスタンスを作らずにMojiのクラスが使えるようにしたいから、self.を追加しました
   def self.kuhaku(str, option=nil)
     if option == :zenkaku
-      str = str.gsub(/\s/, "　")
+      str = str.gsub(/\s/, "　") # 全角に変える
     else
-      str = str.gsub(/　/, " ")
+      str = str.gsub(/　/, " ") # 普通の空白に変える
     end
   end
 
   def self.hiragana(str)
+    str = kuhaku(str)
+    ary = str.split(" ")
+    i = 0
+    ary.each do |kotoba|
+      HIRAGANA.each do |key, value|
+        regexp = Regexp.new(key.to_s)
+        if kotoba.match(regexp)
+          kotoba = kotoba.gsub(regexp, HIRAGANA[key])
+          ary[i] = kotoba
+        end
+      end
+      i += 1
+    end
+    str = String.new
+    ary.each do |kotoba|
+      str += kotoba + "　"
+    end
+    str = str.gsub(/　$/, "") # ary.each で追加した最後の空白を消してから返す
   end
 
   def self.katakana(str, option=nil)
@@ -108,7 +131,5 @@ class Moji
 
 end
 
-
-for moji in Moji::KATAKANA
-  print moji[1]
-end
+str = Moji.hiragana("konnichiwa watashi no tomodachi")
+p str
