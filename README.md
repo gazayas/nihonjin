@@ -55,6 +55,29 @@ p Suji.to_i("参零壱")
 #=> 301
 ```
 
+man(num), oku(num), cho(num)などは大体同じ感じなので<br/>
+それをリファクトリングしたいです<br/>
+```ruby
+# これはもちろん出来てないけど、１つのメソッドにまとめたいです
+def big_num_converter(num, placeholder) # placeholderは「万」や「億」とか
+  num = num.split("")
+  lesser_places = nil
+  remainder = num.length % 4
+  case remainder
+  when 1
+    without_beginning = num.unshift(num[0]) # とりあえずこれは実装できそうなのでそこから始まったらいいかな
+    1.upto(without_beginning.length) do |n|
+      lesser_places += num[-(n)]
+    end
+    big_num_converter(num)
+  
+  ...
+  
+  end
+  num
+end
+```
+
 10_000の場合は「一万」になってるけど、1_000は「千」だけになってる。<br/>
 合ってるかどうか分からないけど、合ってるような気がするww<br/>
 誰か教えてくださいww<br/>
