@@ -85,6 +85,10 @@ end
 <a href="http://www.geocities.jp/f9305710/kazu.html">リンク</a>
 
 ## Moji 文字
+
+「ぢゃ」とか「みゅ」とかはまだ入れてない<br/>
+この<a href="http://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q1163793136">リンクを見てください</a>
+
 文字列をひらがな、カタカナ、半角カタカタ、ローマ字のいずれかに変換できます（漢字は使えません）<br/>
 
 ```ruby
