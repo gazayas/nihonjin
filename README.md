@@ -70,9 +70,9 @@ def big_num_converter(num, placeholder) # placeholderは「万」や「億」と
       lesser_places += num[-(n)]
     end
     big_num_converter(num)
-  
+
   ...
-  
+
   end
   num
 end
@@ -85,6 +85,8 @@ end
 <a href="http://www.geocities.jp/f9305710/kazu.html">リンク</a>
 
 ## Moji 文字
+
+###「たのしいRuby」の文字列クラスの章には、ひらがなやカタカナに変換するための方法が書いてあった。。。それを使った方がいいと思う
 
 「ぢゃ」とか「みゅ」とかはまだ入れてない<br/>
 この<a href="http://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q1163793136">リンクを見てください</a>
