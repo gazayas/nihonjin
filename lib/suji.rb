@@ -4,7 +4,8 @@ class Suji
   ZENKAKU = ["０", "１" , "２", "３", "４", "５", "６", "７", "８", "９"]
   KANJI = ["〇", "一", "二", "三", "四", "五", "六", "七", "八", "九"]
   DAIJI = ["零", "壱", "弐", "参", "肆", "伍", "陸", "漆", "捌", "玖"]
-  DAISU = ["万", "億", "兆", "京", "垓", "𥝱"]
+  DAISU = ["万", "億", "兆", "京", "垓", "𥝱", "穣", "溝", "澗", "正", "載", "極"]
+  # "恒河沙", "阿僧祇", "那由他", "不可思議", "無量大数" => こういうのを入れたかったら、扱いが変わらないとダメだ（長さは1じゃないから）
   
   # 大数の読み方もあればいいかな
   # メソッドの引数にはカンマが入っている時の対応
@@ -71,12 +72,11 @@ class Suji
     if num == "0"
       return kanji(num)
     end
-    finished = false
     comma_place = 4
     comma_counter = 0
-    while finished == false
+    loop do
       if comma_place > (num.length)
-        finished = true
+        break
       else
         num[-(comma_place + comma_counter), 0] = "," if num[-(comma_place + comma_counter)] != nil
         comma_place += 4
@@ -110,9 +110,18 @@ class Suji
         num[0] = ""
       end
     end
-    
-    # 数字は「兆億万」とかにならないように
 
+    # 数字は「一兆億万」とかにならなくて「一兆」みたいになるように
+    num.length.times do |n|
+      DAISU.each do |ds|
+        if num[n] == ds
+          if num[n + 1] == DAISU[(DAISU.index(ds)) - 1]
+            num[n + 1] = ""
+          end
+        end
+      end
+    end
+    
     # p split_num
     num
 
