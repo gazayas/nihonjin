@@ -67,7 +67,7 @@ p Suji.to_i("参零壱")
 
 ## Moji 文字
 
-###「たのしいRuby」の文字列クラスの章には、ひらがなやカタカナに変換するための方法が書いてあった。。。それを使った方がいいと思う
+###「たのしいRuby」299ページにnkfのメソッドのオプションが書いてある。それを使って、to_katana(str)、to_hiragana(str) というようにメソッドを書くこと
 
 「ぢゃ」とか「みゅ」とかはまだ入れてない<br/>
 この<a href="http://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q1163793136">リンクを見てください</a>
