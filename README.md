@@ -63,14 +63,16 @@ p Suji.to_i("参零壱")
 合ってるかどうか分からないけど、合ってるような気がするww<br/>
 誰か教えてくださいww<br/>
 
-<a href="http://www.geocities.jp/f9305710/kazu.html">リンク</a>
+<a href="http://www.geocities.jp/f9305710/kazu.html" target="_blank">リンク</a>
+
+###<a href="https://ja.wikipedia.org/wiki/%E5%A4%A7%E5%AD%97_(%E6%95%B0%E5%AD%97)" target="_blank">このリンク</a>を参考にしてください
 
 ## Moji 文字
 
 ###「たのしいRuby」299ページにnkfのメソッドのオプションが書いてある。それを使って、to_katana(str)、to_hiragana(str) というようにメソッドを書くこと
 
 「ぢゃ」とか「みゅ」とかはまだ入れてない<br/>
-この<a href="http://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q1163793136">リンクを見てください</a>
+この<a href="http://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q1163793136" target="_blank">リンクを見てください</a>
 
 文字列をひらがな、カタカナ、半角カタカタ、ローマ字のいずれかに変換できます（漢字は使えません）<br/>
 
@@ -82,7 +84,7 @@ Moji.romaji(mojiretsu)
 #=> "osushi wa oishii desu ne."
 ```
 
-###<a href="https://ja.wikipedia.org/wiki/%E5%A4%A7%E5%AD%97_(%E6%95%B0%E5%AD%97)" target="_blank">このリンク</a>を参考にしてください
+<a href="http://www.whiteagle.net/" target="_blank">このサイト</a>のjavascriptを参照にしてください
 
 ## Toshi 年
 
