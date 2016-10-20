@@ -79,6 +79,8 @@ def to_hiragana(str, option=:utf-8)
 end
 ```
 
+もし上手く変換されなかったら、エラーで対応すること
+
 「ぢゃ」とか「みゅ」とかはまだ入れてない<br/>
 この<a href="http://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q1163793136" target="_blank">リンクを見てください</a>
 
