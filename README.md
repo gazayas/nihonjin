@@ -77,6 +77,11 @@ def to_hiragana(str, option=:utf-8)
   # また、Encodingという、shift_jsやutf-8などの定数の配列を定義すること
   NKF.nkf('-h1, -#{Encoding[option]}', str)
 end
+
+# 次のようなメソッドも作れたらいいなと...
+def to_hiragana!(str, option=:utf-8)
+   ...
+end
 ```
 
 もし上手く変換されなかったら、エラーで対応すること
