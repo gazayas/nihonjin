@@ -136,6 +136,10 @@ class Moji
     str = kuhaku(str, :zenkaku)
   end
 
+  def self.hiragana!(str, option='-w')
+    str.sub!(str, (hiragana(str, option)))
+  end
+
   def self.katakana(str, option=nil)
     if option == :hankaku
       # 半角のカタカナを返す

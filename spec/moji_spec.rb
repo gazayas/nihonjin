@@ -3,7 +3,7 @@ require 'spec_helper'
 # 「は」の周りに空白があれば、romajiの場合は「wa」になる。それ意外には「ha」になる。
 
 describe Moji do
-  describe '#kuhaku(str)' do
+  describe '#kuhaku' do
     let (:str) { 'にんげん　の　ごじゅうねん　は　はかない　もの　だ。' }
     context '空白はうまく変換されるかどうか確認' do
       it '普通の空白に変換する' do
@@ -18,7 +18,7 @@ describe Moji do
     end
   end
 
-  describe '#kuhaku_invert(str)' do
+  describe '#kuhaku_invert' do
       let(:str) { '　左は全角の空白で、右は半角 ' }
       context '空白は逆になること' do
         it '変換される' do
@@ -28,7 +28,7 @@ describe Moji do
       end
   end
 
-  describe '#hiragana(str)' do
+  describe '#hiragana' do
     let(:quote) { "にんげん　の　ごじゅうねん　は　はかない　もの　だ" }
     context 'ひらがなに変換されること' do
       it 'ローマ字から' do
@@ -44,6 +44,23 @@ describe Moji do
       it 'ミックス' do
         str = Moji.hiragana('ニンゲン　no　ごじゅうねん　ha　ハカナイ　もの　da')
         expect(str).to eq quote
+      end
+
+      it '変数はミューテイトしないこと' do
+        original_id = quote.__id__
+        str = Moji.hiragana(quote)
+        expect(str.__id__).not_to eq original_id
+      end
+    end
+  end
+
+  describe '#hiragana!' do
+    let(:quote) { "にんげん　の　ごじゅうねん　は　はかない　もの　だ" }
+    context 'ミュータブル性をテストすること' do
+      it 'ミューテイトすること' do
+        original_id = quote.__id__
+        Moji.hiragana!(quote)
+        expect(quote.__id__).to eq original_id
       end
     end
   end

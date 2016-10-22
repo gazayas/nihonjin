@@ -78,12 +78,6 @@ def hiragana(str, option=:utf-8)
   NKF.nkf('-h1, -#{Encoding[option]}', str)
 end
 
-# 次のようなメソッドも作れたらいいなと...
-def to_hiragana!(str, option=:utf-8)
-   ...
-end
-```
-
 もし上手く変換されなかったら、エラーで対応すること
 
 「ぢゃ」とか「みゅ」とかはまだ入れてない<br/>
