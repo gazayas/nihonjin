@@ -137,6 +137,3 @@ class Moji
   end
 
 end
-
-str = Moji.hiragana("konnichiwa watashi no tomodachi")
-p str
