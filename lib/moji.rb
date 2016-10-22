@@ -104,6 +104,22 @@ class Moji
     end
   end
 
+  def self.kuhaku_invert(str)
+    str = str.split("")
+    str.each do |s|
+      if s =~ /\s/
+        s = s.sub(/\s/, "　")
+      elsif s =~ /　/
+        s = s.sub(/　/, " ")
+      end
+    end
+    new_str = String.new
+    str.each do |s|
+      new_str += s
+    end
+    new_str
+  end
+
   def self.hiragana(str)
     str = kuhaku(str)
     ary = str.split(" ")

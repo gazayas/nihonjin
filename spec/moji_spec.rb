@@ -5,7 +5,7 @@ require 'spec_helper'
 describe Moji do
   describe '#kuhaku(str)' do
     let (:str) { 'にんげん　の　ごじゅうねん　は　はかない　もの　だ。' }
-    context '空白がうまく変換されるかどうか確認' do
+    context '空白はうまく変換されるかどうか確認' do
       it '普通の空白に変換する' do
         new_str = Moji.kuhaku(str)
         expect(new_str).not_to match /　/ # これは全角の空白
@@ -16,6 +16,16 @@ describe Moji do
         expect(new_str).not_to match /\s/
       end
     end
+  end
+
+  describe '#kuhaku_invert(str)' do
+      let(:str) { '　左は全角の空白で、右は半角 ' }
+      context '空白は逆になること' do
+        it '変換される' do
+          new_str = Moji.kuhaku_invert(str)
+          expect(new_str).to match /(^　)(.+)(\s$)/ # (.+)を変えるかな
+        end
+      end
   end
 
   describe '#hiragana(str)' do
