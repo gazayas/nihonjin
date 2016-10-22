@@ -1,3 +1,5 @@
+require 'nkf' # ここかなww
+
 class Moji
 
   # 特別な文字：
@@ -95,7 +97,6 @@ class Moji
     a: "ｱ", i: "ｲ", u: "ｳ", e: "ｴ", o: "ｵ"
   }
 
-  # インスタンスを作らずにMojiのクラスが使えるようにしたいから、self.を追加しました
   def self.kuhaku(str, option=nil)
     if option == :zenkaku
       str = str.gsub(/\s/, "　") # 全角に変える
@@ -108,9 +109,9 @@ class Moji
     str = str.split("")
     str.each do |s|
       if s =~ /\s/
-        s = s.sub(/\s/, "　")
+        s = s.sub(/\s/, "　") # 全角に
       elsif s =~ /　/
-        s = s.sub(/　/, " ")
+        s = s.sub(/　/, " ") # 半角に
       end
     end
     new_str = String.new
@@ -120,25 +121,19 @@ class Moji
     new_str
   end
 
-  def self.hiragana(str)
-    str = kuhaku(str)
-    ary = str.split(" ")
-    i = 0
-    ary.each do |kotoba|
-      HIRAGANA.each do |key, value|
-        regexp = Regexp.new(key.to_s)
-        if kotoba.match(regexp)
-          kotoba = kotoba.gsub(regexp, HIRAGANA[key])
-          ary[i] = kotoba
-        end
+  # NKFのオプションをメソッドの方で定義すればユーザには使いやすくなります
+  # たのしいRuby299ページを参照してください
+  def self.hiragana(str, option='-w')
+    # カタカナの場合
+    str = NKF.nkf("-h1 #{option}", str)
+    # ローマ字の場合
+    HIRAGANA.each do |key, value|
+      re = Regexp.new(key.to_s)
+      if str.match(re)
+        str = str.gsub(re, HIRAGANA[key])
       end
-      i += 1
     end
-    str = String.new
-    ary.each do |kotoba|
-      str += kotoba + "　"
-    end
-    str = str.gsub(/　$/, "") # ary.each で追加した最後の空白を消してから返す
+    str = kuhaku(str, :zenkaku)
   end
 
   def self.katakana(str, option=nil)
@@ -147,6 +142,10 @@ class Moji
     else
       # 普通のカタカナを返す
     end
+  end
+
+  def self.kana_invert(str, option='-w')
+    # str = NKF.nkf("-h3, #{option}", str)
   end
   
   def self.romaji(str)

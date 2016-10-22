@@ -72,7 +72,7 @@ p Suji.to_i("参零壱")
 ###「たのしいRuby」299ページにnkfのメソッドのオプションが書いてある。それを使って、to_katana(str)、to_hiragana(str) というようにメソッドを書くこと
 
 ```ruby
-def to_hiragana(str, option=:utf-8)
+def hiragana(str, option=:utf-8)
   # strはカタカナでなければ、前提としてここで文字列をカタカナにする
   # また、Encodingという、shift_jsやutf-8などの定数の配列を定義すること
   NKF.nkf('-h1, -#{Encoding[option]}', str)

@@ -29,12 +29,26 @@ describe Moji do
   end
 
   describe '#hiragana(str)' do
-    context 'ローマ字からひらがなに変換されること' do
-      it '織田信長の名言をひらがなに' do
+    let(:quote) { "にんげん　の　ごじゅうねん　は　はかない　もの　だ" }
+    context 'ひらがなに変換されること' do
+      it 'ローマ字から' do
         str = Moji.hiragana('ningen no gojuunen ha hakanai mono da')
-        expect(str).to eq "にんげん　の　ごじゅうねん　は　はかない　もの　だ"
+        expect(str).to eq quote
+      end
+
+      it 'カタカナから' do
+        str = Moji.hiragana('ニンゲン　ノ　ゴジュウネン　ハ　ハカナイ　モノ　ダ')
+        expect(str).to eq quote
+      end
+
+      it 'ミックス' do
+        str = Moji.hiragana('ニンゲン　no　ごじゅうねん　ha　ハカナイ　もの　da')
+        expect(str).to eq quote
       end
     end
+  end
+
+  describe '#kana_invert' do
   end
 
 end
