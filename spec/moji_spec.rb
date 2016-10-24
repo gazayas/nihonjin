@@ -51,6 +51,11 @@ describe Moji do
         str = Moji.hiragana(quote)
         expect(str.__id__).not_to eq original_id
       end
+
+      it '複数のオプションが上手く定義されること' do
+        str = Moji.hiragana('hiragana ni　', '-w', '-Z2')
+        expect(str).to eq 'ひらがな　に　　' # このテストの出力はあんまり好きじゃないから変えることにしたい
+      end
     end
   end
 

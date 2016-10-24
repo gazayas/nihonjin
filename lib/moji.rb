@@ -123,9 +123,12 @@ class Moji
 
   # NKFのオプションをメソッドの方で定義すればユーザには使いやすくなります
   # たのしいRuby299ページを参照してください
-  def self.hiragana(str, option='-w')
+  def self.hiragana(str, *options)
+    options = "-w" if options.empty?
     # カタカナの場合
-    str = NKF.nkf("-h1 #{option}", str)
+    options = options.join(" ") if options.class == Array
+    p options
+    str = NKF.nkf("-h1 #{options}", str)
     # ローマ字の場合
     HIRAGANA.each do |key, value|
       re = Regexp.new(key.to_s)
