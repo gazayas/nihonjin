@@ -172,7 +172,7 @@ class Moji
   def self.romaji(str)
   end
 
-  #private
+  private
 
   # utf-8でない文字列の対応としては、元のエンコーディングとutf-8バージョンの文字列を配列に格納する
   def self.utf8_pass(str)
