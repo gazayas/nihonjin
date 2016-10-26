@@ -97,12 +97,21 @@ class Moji
     a: "ｱ", i: "ｲ", u: "ｳ", e: "ｴ", o: "ｵ"
   }
 
+  Encoding = {
+    utf_8: '-w',
+    shift_jis: '-s',
+    iso_2022_jp: '-j' 
+  }
+
   def self.kuhaku(str, option=nil)
+    str_data = utf8_pass(str)
+    str = str_data[1]
     if option == :zenkaku
       str = str.gsub(/\s/, "　") # 全角に変える
     else
       str = str.gsub(/　/, " ") # 普通の空白に変える
     end
+    str.encode(str_data[0])
   end
 
   def self.kuhaku_invert(str)
@@ -124,11 +133,13 @@ class Moji
   # NKFのオプションをメソッドの方で定義すればユーザには使いやすくなります
   # たのしいRuby299ページを参照してください
   def self.hiragana(str, *options)
-    options = "-w" if options.empty?
-    # カタカナの場合
-    options = options.join(" ") if options.class == Array
-    p options
-    str = NKF.nkf("-h1 #{options}", str)
+
+    options = options.flatten # hiragana!の*optionsが二重してしまうから
+    str_data = utf8_pass(str)
+    str = str_data[1]
+    options = [Encoding[:utf_8]] if options.empty?
+    options = options.join(' ')
+
     # ローマ字の場合
     HIRAGANA.each do |key, value|
       re = Regexp.new(key.to_s)
@@ -136,11 +147,14 @@ class Moji
         str = str.gsub(re, HIRAGANA[key])
       end
     end
+
+    str = NKF.nkf(('-h1 ' + options), str)
     str = kuhaku(str, :zenkaku)
+
   end
 
-  def self.hiragana!(str, option='-w')
-    str.sub!(str, (hiragana(str, option)))
+  def self.hiragana!(str, *options)
+    str.sub!(str, (hiragana(str, options)))
   end
 
   def self.katakana(str, option=nil)
@@ -151,11 +165,20 @@ class Moji
     end
   end
 
-  def self.kana_invert(str, option='-w')
-    # str = NKF.nkf("-h3, #{option}", str)
+  def self.kana_invert(str, *options)
+    # str = NKF.nkf('-h3' + options', str)
   end
   
   def self.romaji(str)
+  end
+
+  #private
+
+  # utf-8でない文字列の対応としては、元のエンコーディングとutf-8バージョンの文字列を配列に格納する
+  def self.utf8_pass(str)
+    original_encoding = str.encoding
+    str = str.encode("UTF-8")
+    str_data = [original_encoding, str]
   end
 
 end
