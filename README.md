@@ -71,12 +71,8 @@ p Suji.to_i("参零壱")
 
 ###「たのしいRuby」299ページにnkfのメソッドのオプションが書いてある。それを使って、to_katana(str)、to_hiragana(str) というようにメソッドを書くこと
 
-```ruby
-def hiragana(str, option=:utf-8)
-  # strはカタカナでなければ、前提としてここで文字列をカタカナにする
-  # また、Encodingという、shift_jsやutf-8などの定数の配列を定義すること
-  NKF.nkf('-h1, -#{Encoding[option]}', str)
-end
+`utf8_pass`ではEncodingという定数じゃなくてEncodingのクラスがstr_data[0]に代入されるので、そこで注意すること<br/>
+定数の名前を変えた方がいいかな。とにかく上手いこと両方を使わないとややこしくなるかもしれない。<br/>
 
 もし上手く変換されなかったら、エラーで対応すること
 
