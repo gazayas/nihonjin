@@ -9,7 +9,13 @@
 
 ##Suji 数字
 今はSujiが少しだけできてる<br/>
-次のメソッドでは、どんな値でも入れていい
+次のメソッドでは、どんな値でも入れていい<br/><br/>
+
+```ruby
+これが使えるかな
+NKF.nkf('-Z0', num)
+```<br/>
+
 ```ruby
 # 今のところは、kanji_henkanは20桁まで変換できます
 p Suji.kanji_henkan(150)
