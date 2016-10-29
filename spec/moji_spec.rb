@@ -56,6 +56,11 @@ describe Moji do
         str = Moji.hiragana('hiragana ni　', '-w', '-Z2')
         expect(str).to eq 'ひらがな　に　　' # このテストの出力はあんまり好きじゃないから変えることにしたい
       end
+
+      it '１つのリレラルにまとまったオプションが上手く定義されること' do
+        str = Moji.hiragana('mojiretsu　', '-w -Z2') # １つの全角のスペースが２つの半角のスペースに
+        expect(str).to eq 'もじれつ　　' # #hiraganaの中で#kuhakuが呼ばれるので、２つの半角のスペースは２つの全角のスペースになる
+      end
     end
   end
 
