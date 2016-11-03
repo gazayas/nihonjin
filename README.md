@@ -12,11 +12,6 @@
 次のメソッドでは、どんな値でも入れていい<br/><br/>
 
 ```ruby
-これが使えるかな
-NKF.nkf('-Z0', num)
-```<br/>
-
-```ruby
 # 今のところは、kanji_henkanは20桁まで変換できます
 p Suji.kanji_henkan(150)
 #=> "百五十"
