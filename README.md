@@ -40,7 +40,7 @@ p Suji.type?(10)
 #=> "半角"
 p Suji.type?("１０")
 #=> "全角"
-p Suji.type?("１０")
+p Suji.type?("十")
 #=> "漢字"
 p Suji.type?("壱")
 #=> "大字"
