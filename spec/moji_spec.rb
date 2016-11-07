@@ -186,7 +186,6 @@ describe Moji do
     context '半角だけの場合' do
       it '端が切られること' do
         new_str = Moji.hashigiri(hankaku_hashigiri_str)
-        p new_str
         expect(new_str).to_not match(/^\s\s$/)
       end
     end

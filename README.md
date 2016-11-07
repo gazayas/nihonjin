@@ -9,6 +9,30 @@
 `Moji`<br/>
 `Toshi`<br/>
 
+## Moji 文字
+
+### いちいちnkfのオプションを調べるのはめんどいなんで、`Moji`で簡単に定義することができます
+```ruby
+Moji.hiragana("hiragana ni naru.")
+#=> "ひらがな　に　なる。"
+Moji.hiragana("ヒラガナ　ニ　ナル。")
+#=> "ひらがな　に　なる。"
+
+
+# 出力コードもシンボルとして定義できます
+Moji.hiragana("hiragana ni naru.", :shift_jis)
+#=> "\x{82D0}\x{82E7}\x{82AA}\x{82C8}\x{8140}\x{82C9}\x{8140}\x{82C8}\x{82E9}\x{8142}"
+Moji::EncodingTypes
+#=> {:utf_8=>"-w", :shift_jis=>"-s", :iso_2022_jp=>"-j", :euc=>"-e"}
+
+# リテラルも渡すことができます
+Moji.hiragana("hiragana ni naru.", "-w", "--mac")
+#=> "ひらがな　に　なる。"
+Moji.hiragana("hiragana ni naru.", "-w --mac")
+#=> "ひらがな　に　なる。"
+```
+
+
 ##Suji 数字
 今はSujiが少しだけできてる<br/>
 次のメソッドでは、どんな値でも入れていい<br/><br/>
@@ -70,30 +94,6 @@ p Suji.to_i("参零壱")
 
 ###<a href="https://ja.wikipedia.org/wiki/%E5%A4%A7%E5%AD%97_(%E6%95%B0%E5%AD%97)">このリンク</a>を参考にしてください
 
-## Moji 文字
-
-###「たのしいRuby」299ページにnkfのメソッドのオプションが書いてある。それを使って、to_katana(str)、to_hiragana(str) というようにメソッドを書くこと
-
-`utf8_pass`ではEncodingという定数じゃなくてEncodingのクラスがstr_data[0]に代入されるので、そこで注意すること<br/>
-定数の名前を変えた方がいいかな。とにかく上手いこと両方を使わないとややこしくなるかもしれない。<br/>
-
-もし上手く変換されなかったら、エラーで対応すること
-
-「ぢゃ」とか「みゅ」とかはまだ入れてない<br/>
-この<a href="http://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q1163793136">リンクを見てください</a>
-
-文字列をひらがな、カタカナ、半角カタカタ、ローマ字のいずれかに変換できます（漢字は使えません）<br/>
-
-```ruby
-Ruby on Railsで、`<span class="fg">水</span>`を書いてhoverしたら、ふりがなが出るようにしたい
-
-mojiretsu = "おすし　は　おいしい　です　ね。"
-Moji.romaji(mojiretsu)
-#=> "osushi wa oishii desu ne."
-```
-
-<a href="http://www.whiteagle.net/" target="">このサイト</a>のjavascriptを参照にしてください
-
 ## Toshi 年
 
 ##しないといけないこと
@@ -103,4 +103,11 @@ Moji.romaji(mojiretsu)
 
 nkfの入力のコード（`'-S'`など）はうまく動かないらしい
 
-一つの方法を決めて分かりやすくて綺麗にすること
+エラーのrescueを実装すること
+
+Ruby on Railsで、`<span class="fg">水</span>`を書いてhoverしたら、ふりがなが出るようにしたい
+
+「ぢゃ」とか「みゅ」とかはまだ入れてない<br/>
+この<a href="http://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q1163793136">リンクを見てください</a>
+
+<a href="http://www.whiteagle.net/" target="">このサイト</a>のjavascriptを参照にしてください
