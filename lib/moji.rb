@@ -149,6 +149,12 @@ class Moji
   # たのしいRuby299ページを参照してください
   def self.hiragana(str, *options)
 
+    options = options.map do |option|
+      if option.class == Symbol
+        option = EncodingTypes[option]
+      end
+      option
+    end
     options = options.flatten # hiragana!の*optionsが二重してしまうから
     str_data = utf8_pass(str)
     str = str_data[1]
@@ -208,10 +214,17 @@ class Moji
   end
 
   def self.hashigiri(str)
-    # trimと同じけど、全角も切れる
+    if str.match(/^　/)
+      str = str.sub(/^　/, " ")
+    end
+    if str.match(/　$/)
+      str = str.sub(/　$/, " ")
+    end
+    str = str.strip
   end
 
   def self.hashigiri!(str)
+    str = str.sub(str, hashigiri(str))
   end
 
   private

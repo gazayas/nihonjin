@@ -9,6 +9,9 @@ describe Moji do
   let(:romaji_str) { 'ningen no gojuunen ha hakanai mono da.' }
   let(:kuhaku_invert_str) { '　左は全角の空白で、右は半角 ' }
   let(:mixed_str) { 'ニンゲン　no　ごじゅうねん　ha　ハカナイ　もの　da.' }
+
+  let(:hankaku_hashigiri_str) { ' 半角の空白 ' }
+  let(:zenkaku_hashigiri_str) { '　全角の空白　' }
   # shift_jis(str)などのメソッドはspec_helperに入っています
 
   describe '#kuhaku' do
@@ -96,16 +99,31 @@ describe Moji do
       end
     end
 
-    context 'オプションを渡す場合' do
-      it '別のリテラルとしてうまく定義されること' do
-        new_str = Moji.hiragana(katakana_str, '-s', '--mac')
-        shift_jis_str = shift_jis(katakana_str)
-        expect(new_str.encoding).to eq(shift_jis_str.encoding)
+    describe 'オプションを渡す場合' do
+      context 'シンボルとしてオプションを渡す場合' do
+        it ':utf_8（デフォルト）の場合' do
+          new_str = Moji.hiragana(katakana_str, :utf_8)
+          utf8_str = utf_8(katakana_str)
+          expect(new_str.encoding).to eq(katakana_str.encoding)
+        end
+        it ':shift_jisの場合' do
+          new_str = Moji.hiragana(katakana_str, :shift_jis)
+          shift_jis_str = shift_jis(katakana_str)
+          expect(new_str.encoding).to eq(shift_jis_str.encoding)
+        end
       end
-      it '１つのリテラルとしてうまく定義されること' do
-        new_str = Moji.hiragana(katakana_str, '-s --mac')
-        shift_jis_str = shift_jis(katakana_str)
-        expect(new_str.encoding).to eq(shift_jis_str.encoding)
+
+      context '文字列としてオプションを渡す場合' do
+        it '別のリテラルとしてうまく定義されること' do
+          new_str = Moji.hiragana(katakana_str, '-s', '--mac')
+          shift_jis_str = shift_jis(katakana_str)
+          expect(new_str.encoding).to eq(shift_jis_str.encoding)
+        end
+        it '１つのリテラルとしてうまく定義されること' do
+          new_str = Moji.hiragana(katakana_str, '-s --mac')
+          shift_jis_str = shift_jis(katakana_str)
+          expect(new_str.encoding).to eq(shift_jis_str.encoding)
+        end
       end
     end
   end
@@ -165,9 +183,58 @@ describe Moji do
   end
 
   describe '#hashigiri' do
+    context '半角だけの場合' do
+      it '端が切られること' do
+        new_str = Moji.hashigiri(hankaku_hashigiri_str)
+        p new_str
+        expect(new_str).to_not match(/^\s\s$/)
+      end
+    end
+
+    context '全角だけの場合' do
+      it '端が切られること' do
+        new_str = Moji.hashigiri(zenkaku_hashigiri_str)
+        expect(new_str).to_not match(/^　　$/)
+      end
+    end
+
+    context 'ミックスの場合' do
+      it '端が切られること' do
+        new_str = Moji.hashigiri(kuhaku_invert_str)
+        expect(new_str).to_not match(/^　\s$/)
+      end
+    end
   end
 
   describe '#hashigiri!' do
+    context '半角だけの場合' do
+      it '端が切られること' do
+        new_str = Moji.hashigiri(hankaku_hashigiri_str)
+        expect(new_str).to_not match(/^\s\s$/)
+      end
+    end
+
+    context '全角だけの場合' do
+      it '端が切られること' do
+        new_str = Moji.hashigiri(zenkaku_hashigiri_str)
+        expect(new_str).to_not match(/^　　$/)
+      end
+    end
+
+    context 'ミックスの場合' do
+      it '端が切られること' do
+        new_str = Moji.hashigiri(kuhaku_invert_str)
+        expect(new_str).to_not match(/^　\s$/)
+      end
+    end
+
+    context 'ミューテイトする場合' do
+      it 'うまくミューテイトされること' do
+        original_id = zenkaku_hashigiri_str.__id__
+        Moji.hashigiri!(zenkaku_hashigiri_str)
+        expect(zenkaku_hashigiri_str.__id__).to eq original_id
+      end
+    end
   end
 
 end

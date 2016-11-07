@@ -3,12 +3,12 @@ require 'nihonjin'
 require 'moji'
 require 'suji'
 
-def shift_jis(str)
-  str = str.encode('SHIFT_JIS')
-end
-
 def utf_8(str)
   str = str.encode('UTF-8')
+end
+
+def shift_jis(str)
+  str = str.encode('SHIFT_JIS')
 end
 
 def iso_2022_jp(str)
