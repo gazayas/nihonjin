@@ -4,9 +4,11 @@ describe Moji do
 
   let(:zenkaku_str) { '全角　ばっかり　です　ね' }
   let(:hankaku_str) { '半角 ばっかり です ね' }
-  let(:hiragana) { 'にんげん　の　ごじゅうねん　は　はかない　もの　だ。' }
-  let(:romaji) { 'ningen no gojuunen ha hakanai mono da' }
+  let(:hiragana_str) { 'にんげん　の　ごじゅうねん　は　はかない　もの　だ。' }
+  let(:katakana_str) { 'ニンゲン　ノ　ゴジュウネン　ハ　ハカナイ　モノ　ダ。' }
+  let(:romaji_str) { 'ningen no gojuunen ha hakanai mono da.' }
   let(:kuhaku_invert_str) { '　左は全角の空白で、右は半角 ' }
+  let(:mixed_str) { 'ニンゲン　no　ごじゅうねん　ha　ハカナイ　もの　da.' }
   # shift_jis(str)などのメソッドはspec_helperに入っています
 
   describe '#kuhaku' do
@@ -64,56 +66,108 @@ describe Moji do
      end
   end
 
-
-=begin
-
   describe '#hiragana' do
-    let(:quote) { "にんげん　の　ごじゅうねん　は　はかない　もの　だ" }
-    context 'ひらがなに変換されること' do
-      it 'ローマ字から' do
-        str = Moji.hiragana('ningen no gojuunen ha hakanai mono da')
-        expect(str).to eq quote
+    context 'ローマ字の場合' do
+      it 'うまく変換されること' do
+        new_str = Moji.hiragana(romaji_str)
+        expect(new_str).to eq(hiragana_str)
       end
+    end
 
-      it 'カタカナから' do
-        str = Moji.hiragana('ニンゲン　ノ　ゴジュウネン　ハ　ハカナイ　モノ　ダ')
-        expect(str).to eq quote
+    context 'カタカナの場合' do
+      it 'うまく変換されること' do
+        new_str = Moji.hiragana(katakana_str)
+        expect(new_str).to eq(hiragana_str)
       end
+    end
 
-      it 'ミックス' do
-        str = Moji.hiragana('ニンゲン　no　ごじゅうねん　ha　ハカナイ　もの　da')
-        expect(str).to eq quote
+    context 'ミックスの場合' do
+      it 'うまく変換されること' do
+        new_str = Moji.hiragana(mixed_str)
+        expect(new_str).to eq(hiragana_str)
       end
+    end
 
+    context 'ミューテイトしない場合' do
       it '変数はミューテイトしないこと' do
-        original_id = quote.__id__
-        str = Moji.hiragana(quote)
-        expect(str.__id__).not_to eq original_id
+        original_id = katakana_str.__id__
+        new_str = Moji.hiragana(katakana_str)
+        expect(new_str.__id__).not_to eq original_id
       end
+    end
 
-      it '複数のオプションが上手く定義されること' do
-        str = Moji.hiragana('hiragana ni　', '-w', '-Z2')
-        expect(str).to eq 'ひらがな　に　　' # このテストの出力はあんまり好きじゃないから変えることにしたい
+    context 'オプションを渡す場合' do
+      it '別のリテラルとしてうまく定義されること' do
+        new_str = Moji.hiragana(katakana_str, '-s', '--mac')
+        shift_jis_str = shift_jis(katakana_str)
+        expect(new_str.encoding).to eq(shift_jis_str.encoding)
       end
-
-      it '１つのリテラルにまとまったオプションが上手く定義されること' do
-        str = Moji.hiragana('mojiretsu　', '-w -Z2') # １つの全角のスペースが２つの半角のスペースに
-        expect(str).to eq 'もじれつ　　' # #hiraganaの中で#kuhakuが呼ばれるので、２つの半角のスペースは２つの全角のスペースになる
-        # このテストはややこしすぎるww変えた方がいい
+      it '１つのリテラルとしてうまく定義されること' do
+        new_str = Moji.hiragana(katakana_str, '-s --mac')
+        shift_jis_str = shift_jis(katakana_str)
+        expect(new_str.encoding).to eq(shift_jis_str.encoding)
       end
     end
   end
 
   describe '#hiragana!' do
-    let(:quote) { "にんげん　の　ごじゅうねん　は　はかない　もの　だ" }
-    context 'ミュータブル性をテストすること' do
-      it 'ミューテイトすること' do
-        original_id = quote.__id__
-        Moji.hiragana!(quote)
-        expect(quote.__id__).to eq original_id
+    context 'ミューテイトする場合' do
+      it 'うまくミューテイトされること' do
+        original_id = katakana_str.__id__
+        Moji.hiragana!(katakana_str)
+        expect(katakana_str.__id__).to eq original_id
+      end
+    end
+
+    # #hiragana!でoptionsが二重してしまうから次のテストは大事です
+    context 'オプションを渡す場合' do
+      it '別のリテラルとしてうまく定義されること' do
+        new_str = Moji.hiragana!(katakana_str, '-s', '--mac')
+        shift_jis_str = shift_jis(katakana_str)
+        expect(new_str.encoding).to eq(shift_jis_str.encoding)
+      end
+      it '１つのリテラルとしてうまく定義されること' do
+        new_str = Moji.hiragana!(katakana_str, '-s --mac')
+        shift_jis_str = shift_jis(katakana_str)
+        expect(new_str.encoding).to eq(shift_jis_str.encoding)
       end
     end
   end
 
-=end
+  describe '#katakana' do
+  end
+
+  describe '#katakana!' do
+  end
+
+  describe '#hankaku_katakana' do
+  end
+
+  describe '#hankaku_katakana!' do
+  end
+
+  describe '#romaji' do
+  end
+
+  describe '#romaji!' do
+  end
+
+  describe '#kana_invert' do
+  end
+
+  describe '#kana_invert!' do
+  end
+
+  describe '#kiru' do
+  end
+
+  describe '#kiru!' do
+  end
+
+  describe '#hashigiri' do
+  end
+
+  describe '#hashigiri!' do
+  end
+
 end

@@ -56,7 +56,7 @@ p Suji.to_i("参零壱")
 #=> 301
 ```
 
-*うまく動いてない。１つのテストだけがダメだ。
+うまく動いてない。１つのテストだけがダメだ。
 上は、20桁まで行けるって言うけど、実はもっと長い数字を変換できる。<br/>
 バグをなくしてからまたreadmeを直すこと
 
@@ -64,9 +64,9 @@ p Suji.to_i("参零壱")
 合ってるかどうか分からないけど、合ってるような気がするww<br/>
 誰か教えてくださいww<br/>
 
-<a href="http://www.geocities.jp/f9305710/kazu.html" target="_blank">リンク</a>
+<a href="http://www.geocities.jp/f9305710/kazu.html">リンク</a>
 
-###<a href="https://ja.wikipedia.org/wiki/%E5%A4%A7%E5%AD%97_(%E6%95%B0%E5%AD%97)" target="_blank">このリンク</a>を参考にしてください
+###<a href="https://ja.wikipedia.org/wiki/%E5%A4%A7%E5%AD%97_(%E6%95%B0%E5%AD%97)">このリンク</a>を参考にしてください
 
 ## Moji 文字
 
@@ -78,7 +78,7 @@ p Suji.to_i("参零壱")
 もし上手く変換されなかったら、エラーで対応すること
 
 「ぢゃ」とか「みゅ」とかはまだ入れてない<br/>
-この<a href="http://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q1163793136" target="_blank">リンクを見てください</a>
+この<a href="http://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q1163793136">リンクを見てください</a>
 
 文字列をひらがな、カタカナ、半角カタカタ、ローマ字のいずれかに変換できます（漢字は使えません）<br/>
 
@@ -90,12 +90,15 @@ Moji.romaji(mojiretsu)
 #=> "osushi wa oishii desu ne."
 ```
 
-<a href="http://www.whiteagle.net/" target="_blank">このサイト</a>のjavascriptを参照にしてください
+<a href="http://www.whiteagle.net/" target="">このサイト</a>のjavascriptを参照にしてください
 
 ## Toshi 年
 
 ##しないといけないこと
+テストはまだRSpecらしくはないから、letやbeforeなどを入れたい
+
 `require 'nkf'`をどこに貼ればいいか工夫すること
 
-テストはあんまり綺麗じゃない<br/>
+nkfの入力のコード（`'-S'`など）はうまく動かないらしい
+
 一つの方法を決めて分かりやすくて綺麗にすること

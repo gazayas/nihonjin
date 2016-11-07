@@ -98,22 +98,27 @@ class Moji
     a: "ｱ", i: "ｲ", u: "ｳ", e: "ｴ", o: "ｵ"
   }
 
-  Encoding = {
+  EncodingTypes = {
     utf_8: '-w',
     shift_jis: '-s',
-    iso_2022_jp: '-j'
+    iso_2022_jp: '-j',
+    euc: '-e'
   }
 
   def self.kuhaku(str, option=nil)
     str_data = utf8_pass(str)
     str = str_data[1]
 
+    # :double というオプションを入れたい。nkfの-Z2のこと
     if option == :zenkaku
       str = str.gsub(/\s/, "　") # 全角に変える
     else
       str = str.gsub(/　/, " ") # 普通の空白に変える
     end
     str.encode(str_data[0])
+  end
+
+  def self.kuhaku!(str, option=nil)
   end
 
   def self.kuhaku_invert(str)
@@ -137,21 +142,27 @@ class Moji
     new_str.encode(str_data[0])
   end
 
-  # NKFのオプションをメソッドの方で定義すればユーザには使いやすくなります
+  def self.kuhaku_invert!(str)
+  end
+
+  # NKFのオプションを#hiraganaの方で定義すれば、Moji.hiragana()を呼ぶだけで文字列が簡単に変換されます
   # たのしいRuby299ページを参照してください
   def self.hiragana(str, *options)
 
     options = options.flatten # hiragana!の*optionsが二重してしまうから
     str_data = utf8_pass(str)
     str = str_data[1]
-    options = [Encoding[:utf_8]] if options.empty?
-    options = options.join(' ')
+    options = options.join(' ') # optionsは空であっても文字列に変換されます
+
+    options = EncodingTypes[:utf_8] if options.empty?
 
     # ローマ字の場合
     HIRAGANA.each do |key, value|
       re = Regexp.new(key.to_s)
       if str.match(re)
         str = str.gsub(re, HIRAGANA[key])
+      elsif str.match(".")
+        str = str.gsub(".", "。")
       end
     end
 
@@ -164,19 +175,43 @@ class Moji
     str.sub!(str, (hiragana(str, options)))
   end
 
-  def self.katakana(str, option=nil)
-    if option == :hankaku
-      # 半角のカタカナを返す
-    else
-      # 普通のカタカナを返す
-    end
+  def self.katakana(str, *options)
+  end
+
+  def self.katakana!(str, *options)
+  end
+
+  def self.hankaku_katakana(str, *options)
+  end
+
+  def self.hankaku_katakana!(str, *options)
+  end
+
+  def self.romaji(str)
+  end
+
+  def self.romaji!(str)
   end
 
   def self.kana_invert(str, *options)
     # str = NKF.nkf('-h3' + options', str)
   end
 
-  def self.romaji(str)
+  def self.kana_invert!(str, *options)
+  end
+
+  def self.kiru(str)
+    # 空白を全部切る
+  end
+
+  def self.kiru!(str)
+  end
+
+  def self.hashigiri(str)
+    # trimと同じけど、全角も切れる
+  end
+
+  def self.hashigiri!(str)
   end
 
   private
