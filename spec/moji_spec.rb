@@ -1,32 +1,71 @@
 require 'spec_helper'
 
-# 「は」の周りに空白があれば、romajiの場合は「wa」になる。それ意外には「ha」になる。
-
 describe Moji do
+
+  let(:zenkaku_str) { '全角　ばっかり　です　ね' }
+  let(:hankaku_str) { '半角 ばっかり です ね' }
+  let(:hiragana) { 'にんげん　の　ごじゅうねん　は　はかない　もの　だ。' }
+  let(:romaji) { 'ningen no gojuunen ha hakanai mono da' }
+  let(:kuhaku_invert_str) { '　左は全角の空白で、右は半角 ' }
+  # shift_jis(str)などのメソッドはspec_helperに入っています
+
   describe '#kuhaku' do
-    let (:str) { 'にんげん　の　ごじゅうねん　は　はかない　もの　だ。' }
-    context '空白はうまく変換されるかどうか確認' do
-      it '普通の空白に変換する' do
-        new_str = Moji.kuhaku(str)
-        expect(new_str).not_to match /　/ # これは全角の空白
+    context '半角に変換する場合' do
+      it 'うまく変換される' do
+        str = Moji.kuhaku(zenkaku_str)
+        str = str.split(/\s/)
+        expect(str.length).to eq(4)
       end
-      let(:str) { 'ningen no gojyunen wa hakanai mono da.' }
-      it 'オプションを渡して普通の空白は全角に変換される' do
-        new_str = Moji.kuhaku(str, :zenkaku)
-        expect(new_str).not_to match /\s/
+      it '適切なエンコーディングを返すこと' do
+        shift_str = shift_jis(zenkaku_str)
+        new_str = Moji.kuhaku(shift_str)
+        expect(new_str.encoding).to eq(shift_str.encoding)
+      end
+    end
+
+    context '全角に変換する場合' do
+      it 'うまく変換される' do
+        str = Moji.kuhaku('半角 ばっかり です ね', :zenkaku)
+        str = str.split(/　/)
+        expect(str.length).to eq(4)
+      end
+      it '適切なエンコーディングを返すこと' do
+        euc_jp_str = euc_jp(hankaku_str)
+        new_str = Moji.kuhaku(euc_jp_str, :zenkaku)
+        expect(new_str.encoding).to eq(euc_jp_str.encoding)
       end
     end
   end
 
   describe '#kuhaku_invert' do
-      let(:str) { '　左は全角の空白で、右は半角 ' }
-      context '空白は逆になること' do
-        it '変換される' do
-          new_str = Moji.kuhaku_invert(str)
-          expect(new_str).to match /(^　)(.+)(\s$)/ # (.+)を変えるかな
-        end
-      end
+     context '全角も半角が両方入ってる時' do
+       it '両方がうまく入れ替えられること' do
+         new_str = Moji.kuhaku_invert(kuhaku_invert_str)
+         expect(new_str).to match(/(^\s)(.+)(　$)/)
+       end
+       it '適切なエンコーディングを返すこと' do
+         shift_jis_str = shift_jis(kuhaku_invert_str)
+         new_str = Moji.kuhaku_invert(shift_jis_str)
+         expect(new_str.encoding).to eq(shift_jis_str.encoding)
+       end
+     end
+
+     context '１つの空白の種類だけの場合' do
+       it '全角だけが入ってる文字列が変換されること' do
+         new_str = Moji.kuhaku_invert(zenkaku_str)
+         new_str = new_str.split(/\s/)
+         expect(new_str.length).to eq(4)
+       end
+       it '半角だけが入ってる文字列が変換されること' do
+         new_str = Moji.kuhaku_invert(hankaku_str)
+         new_str = new_str.split("　")
+         expect(new_str.length).to eq(4)
+       end
+     end
   end
+
+
+=begin
 
   describe '#hiragana' do
     let(:quote) { "にんげん　の　ごじゅうねん　は　はかない　もの　だ" }
@@ -76,7 +115,5 @@ describe Moji do
     end
   end
 
-  describe '#kana_invert' do
-  end
-
+=end
 end

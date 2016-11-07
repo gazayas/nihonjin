@@ -32,7 +32,7 @@ class Moji
     ra: "ら", ri: "り", ru: "る", re: "れ", ro: "ろ",
     wa: "わ", wi: "ゐ",           we: "ゑ", wo: "を",
     n: "ん",
-    
+
     v: "ゔ",
     ga: "が", gi: "ぎ", gu: "ぐ", ge: "げ", go: "ご",
     za: "ざ", ji: "じ", zu: "ず", ze: "ぜ", zo: "ぞ",
@@ -58,7 +58,7 @@ class Moji
     ra: "ラ", ri: "リ", ru: "ル", re: "レ", ro: "ロ",
     wa: "ワ", wi: "ヰ",           we: "ヱ", wo: "ヲ",
     n: "ン",
-    
+
     v: "ヴ",
     ga: "ガ", gi: "ギ", gu: "グ", ge: "ゲ", go: "ゴ",
     za: "ザ", ji: "ジ", zu: "ズ", ze: "ゼ", zo: "ゾ",
@@ -73,7 +73,7 @@ class Moji
   }
 
   KATAKANA_HANKAKU = {
-    
+
     ka: "ｶ", ki: "ｷ", ku: "ｸ", ke: "ｹ", ko: "ｺ",
     sa: "ｻ", shi: "ｼ", su: "ｽ", se: "ｾ", so: "ｿ",
     ta: "ﾀ", chi: "ﾁ", tsu: "ﾂ", te: "ﾃ", to: "ﾄ",
@@ -84,7 +84,7 @@ class Moji
     ra: "ﾗ", ri: "ﾘ", ru: "ﾙ", re: "ﾚ", ro: "ﾛ",
     wa: "ﾜ", wi: "",           we: "", wo: "ｦ",
     n: "",
-    
+
     v: "ｳﾞ",
     ga: "ｶﾞ", gi: "ｷﾞ", gu: "ｸﾞ", ge: "ｹﾞ", go: "ｺﾞ",
     za: "ｻﾞ", ji: "ｼﾞ", zu: "ｽﾞ", ze: "ｾﾞ", zo: "ｿﾞ",
@@ -101,12 +101,13 @@ class Moji
   Encoding = {
     utf_8: '-w',
     shift_jis: '-s',
-    iso_2022_jp: '-j' 
+    iso_2022_jp: '-j'
   }
 
   def self.kuhaku(str, option=nil)
     str_data = utf8_pass(str)
     str = str_data[1]
+
     if option == :zenkaku
       str = str.gsub(/\s/, "　") # 全角に変える
     else
@@ -116,19 +117,24 @@ class Moji
   end
 
   def self.kuhaku_invert(str)
+    str_data = utf8_pass(str)
+    str = str_data[1]
+
     str = str.split("")
-    str.each do |s|
-      if s =~ /\s/
-        s = s.sub(/\s/, "　") # 全角に
-      elsif s =~ /　/
-        s = s.sub(/　/, " ") # 半角に
+    str = str.map do |s|
+      if s =~ /\s/ # 半角であれば
+        s = "　" # 全角に
+      elsif s =~ /　/ # 全角であれば
+        s = " " # 半角に
+      else
+        s
       end
     end
     new_str = String.new
     str.each do |s|
       new_str += s
     end
-    new_str
+    new_str.encode(str_data[0])
   end
 
   # NKFのオプションをメソッドの方で定義すればユーザには使いやすくなります
@@ -169,7 +175,7 @@ class Moji
   def self.kana_invert(str, *options)
     # str = NKF.nkf('-h3' + options', str)
   end
-  
+
   def self.romaji(str)
   end
 
