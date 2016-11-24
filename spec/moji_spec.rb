@@ -9,6 +9,7 @@ describe Moji do
   let(:romaji_str) { 'ningen no gojuunen ha hakanai mono da.' }
   let(:kuhaku_invert_str) { '　左は全角の空白で、右は半角 ' }
   let(:mixed_str) { 'ニンゲン　no　ごじゅうねん　ha　ハカナイ　もの　da.' }
+  let(:upcase_str) { 'NINGEN NO GOJUUNEN HA HAKANAI MONO DA.' }
 
   let(:hankaku_hashigiri_str) { ' 半角の空白 ' }
   let(:zenkaku_hashigiri_str) { '　全角の空白　' }
@@ -91,6 +92,13 @@ describe Moji do
     context 'ミックスの場合' do
       it 'うまく変換されること' do
         new_str = Moji.hiragana(mixed_str)
+        expect(new_str).to eq(hiragana_str)
+      end
+    end
+
+    context '大文字の場合' do
+      it 'うまく変換されること' do
+        new_str = Moji.hiragana(upcase_str)
         expect(new_str).to eq(hiragana_str)
       end
     end

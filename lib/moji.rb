@@ -149,6 +149,8 @@ class Moji
   # たのしいRuby299ページを参照してください
   def self.hiragana(str, *options)
 
+    str = str.downcase
+
     options = options.map do |option|
       if option.class == Symbol
         option = EncodingTypes[option]
