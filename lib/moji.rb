@@ -105,6 +105,12 @@ class Moji
     euc: '-e'
   }
 
+  Consonants = ["bb", "cc", "dd", "ff", "gg", "hh", "jj", "kk", "ll", "pp", "qq", "rr", "ss", "tt", "vv", "ww", "yy", "zz"]
+
+  # これはちょっと見にくいから直せばいい
+  # ところで[0]の方は英字で[1]の方は日本語
+  Symbols = [[".", "。"], ["!", "！"], ["?", "？"]]
+
   def self.kuhaku(str, option=nil)
     str_data = utf8_pass(str)
     str = str_data[1]
@@ -151,6 +157,12 @@ class Moji
 
     str = str.downcase
 
+    Consonants.each do |c|
+      if str.match(c)
+        str = str.gsub(c, ("っ" + c[0]))
+      end
+    end
+
     options = options.map do |option|
       if option.class == Symbol
         option = EncodingTypes[option]
@@ -169,9 +181,11 @@ class Moji
       re = Regexp.new(key.to_s)
       if str.match(re)
         str = str.gsub(re, HIRAGANA[key])
-      elsif str.match(".")
-        str = str.gsub(".", "。")
       end
+    end
+
+    Symbols.each do |symbol|
+      str = str.gsub(symbol[0], symbol[1])
     end
 
     str = NKF.nkf(('-h1 ' + options), str)

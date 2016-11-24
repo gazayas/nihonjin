@@ -10,6 +10,7 @@ describe Moji do
   let(:kuhaku_invert_str) { '　左は全角の空白で、右は半角 ' }
   let(:mixed_str) { 'ニンゲン　no　ごじゅうねん　ha　ハカナイ　もの　da.' }
   let(:upcase_str) { 'NINGEN NO GOJUUNEN HA HAKANAI MONO DA.' }
+  let(:small_tsu_str) { 'chiisai tsu atta yo! atta!' }
 
   let(:hankaku_hashigiri_str) { ' 半角の空白 ' }
   let(:zenkaku_hashigiri_str) { '　全角の空白　' }
@@ -75,6 +76,7 @@ describe Moji do
   end
 
   describe '#hiragana' do
+
     context 'ローマ字の場合' do
       it 'うまく変換されること' do
         new_str = Moji.hiragana(romaji_str)
@@ -100,6 +102,13 @@ describe Moji do
       it 'うまく変換されること' do
         new_str = Moji.hiragana(upcase_str)
         expect(new_str).to eq(hiragana_str)
+      end
+    end
+
+    context '小さい「っ」が入るはず場合' do
+      it 'うまく変換される' do
+        new_str = Moji.hiragana(small_tsu_str)
+        expect(new_str).to eq("ちいさい　つ　あった　よ！　あった！")
       end
     end
 
