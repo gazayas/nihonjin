@@ -18,7 +18,7 @@ class Moji
     sha: "しゃ",        shu: "しゅ",        sho: "しょ",
     ja: "じゃ",         ju: "じゅ",         jo: "じょ",
     cha: "ちゃ",        chu: "ちゅ",        cho: "ちょ",
-    ja2: "ぢゃ",        ju2: "ぢゅ",        jo2: "ぢょ",
+    ja2: "ぢゃ",        ju2: "ぢゅ",        jo2: "ぢょ", # この欄は要る？
     nya: "にゃ",        nyu: "にゅ",        nyo: "にょ",
     tsu: "つ",
     # あとは「ひゃ」とか「びゃ」とかはまだ。。。
@@ -154,15 +154,6 @@ class Moji
   # NKFのオプションを#hiraganaの方で定義すれば、Moji.hiragana()を呼ぶだけで文字列が簡単に変換されます
   # たのしいRuby299ページを参照してください
   def self.hiragana(str, *options)
-
-    str = str.downcase
-
-    Consonants.each do |c|
-      if str.match(c)
-        str = str.gsub(c, ("っ" + c[0]))
-      end
-    end
-
     options = options.map do |option|
       if option.class == Symbol
         option = EncodingTypes[option]
@@ -173,8 +164,15 @@ class Moji
     str_data = utf8_pass(str)
     str = str_data[1]
     options = options.join(' ') # optionsは空であっても文字列に変換されます
-
     options = EncodingTypes[:utf_8] if options.empty?
+
+    str = str.downcase
+
+    Consonants.each do |c|
+      if str.match(c)
+        str = str.gsub(c, ("っ" + c[0]))
+      end
+    end
 
     # ローマ字の場合
     HIRAGANA.each do |key, value|
@@ -190,7 +188,6 @@ class Moji
 
     str = NKF.nkf(('-h1 ' + options), str)
     str = kuhaku(str, :zenkaku)
-
   end
 
   def self.hiragana!(str, *options)
@@ -198,6 +195,7 @@ class Moji
   end
 
   def self.katakana(str, *options)
+    # #hiraganaを読んでからnkfのメソッドを呼ぶだけでいいかな？
   end
 
   def self.katakana!(str, *options)
@@ -220,6 +218,7 @@ class Moji
   end
 
   def self.kana_invert!(str, *options)
+    # str = str.sub!(str, (kana_invert(str, options)))
   end
 
   def self.kiru(str)

@@ -76,7 +76,6 @@ describe Moji do
   end
 
   describe '#hiragana' do
-
     context 'ローマ字の場合' do
       it 'うまく変換されること' do
         new_str = Moji.hiragana(romaji_str)
