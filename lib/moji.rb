@@ -207,10 +207,14 @@ class Moji
   end
 
   def self.kiru(str)
-    # 空白を全部切る
+    if str.match(/　/)
+      str = str.gsub(/　/, " ")
+    end
+    str.gsub(/\s/, "")
   end
 
   def self.kiru!(str)
+    str = str.sub(str, kiru(str))
   end
 
   def self.hashigiri(str)

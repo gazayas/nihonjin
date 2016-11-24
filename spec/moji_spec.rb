@@ -12,6 +12,10 @@ describe Moji do
 
   let(:hankaku_hashigiri_str) { ' 半角の空白 ' }
   let(:zenkaku_hashigiri_str) { '　全角の空白　' }
+
+  let(:hankaku_kiru_str) { ' この 空白 は 半角だけ ' }
+  let(:zenkaku_kiru_str) { '　この　空白　は　全角　だけ　'}
+  let(:mixed_kiru_str) { ' 最初 は 半角 。　後　は　全角　' }
   # shift_jis(str)などのメソッドはspec_helperに入っています
 
   describe '#kuhaku' do
@@ -177,9 +181,37 @@ describe Moji do
   end
 
   describe '#kiru' do
+    context '半角の空白だけ' do
+      it '空白はなくなること' do
+        new_str = Moji.kiru(hankaku_kiru_str)
+        expect(new_str).to_not match(/\s/)
+      end
+    end
+
+    context '全角の空白だけ' do
+      it '空白はなくなること' do
+        new_str = Moji.kiru(zenkaku_kiru_str)
+        expect(new_str).to_not match(/　/)
+      end
+    end
+
+    context '全角の空白も半角の空白もなくなる' do
+      it '空白はなくなること' do
+        new_str = Moji.kiru(mixed_kiru_str)
+        expect(new_str).to_not match(/　/)
+        expect(new_str).to_not match(/\s/)
+      end
+    end
   end
 
   describe '#kiru!' do
+    context 'ミューテイトする場合' do
+      it 'うまくミューテイトされること' do
+        original_id = zenkaku_kiru_str.__id__
+        Moji.kiru!(zenkaku_kiru_str)
+        expect(zenkaku_kiru_str.__id__).to eq original_id
+      end
+    end
   end
 
   describe '#hashigiri' do
