@@ -2,25 +2,15 @@ require 'spec_helper'
 
 describe Moji do
 
-  let(:zenkaku_str) { '全角　ばっかり　です　ね' }
-  let(:hankaku_str) { '半角 ばっかり です ね' }
   let(:hiragana_str) { 'にんげん　の　ごじゅうねん　は　はかない　もの　だ。' }
-  let(:katakana_str) { 'ニンゲン　ノ　ゴジュウネン　ハ　ハカナイ　モノ　ダ。' }
-  let(:romaji_str) { 'ningen no gojuunen ha hakanai mono da.' }
-  let(:kuhaku_invert_str) { '　左は全角の空白で、右は半角 ' }
-  let(:mixed_str) { 'ニンゲン　no　ごじゅうねん　ha　ハカナイ　もの　da.' }
-  let(:upcase_str) { 'NINGEN NO GOJUUNEN HA HAKANAI MONO DA.' }
-  let(:small_tsu_str) { 'chiisai tsu atta yo! atta!' }
 
-  let(:hankaku_hashigiri_str) { ' 半角の空白 ' }
-  let(:zenkaku_hashigiri_str) { '　全角の空白　' }
-
-  let(:hankaku_kiru_str) { ' この 空白 は 半角だけ ' }
-  let(:zenkaku_kiru_str) { '　この　空白　は　全角　だけ　'}
-  let(:mixed_kiru_str) { ' 最初 は 半角 。　後　は　全角　' }
   # shift_jis(str)などのメソッドはspec_helperに入っています
 
   describe '#kuhaku' do
+
+    let(:zenkaku_str) { '全角　ばっかり　です　ね' }
+    let(:hankaku_str) { '半角 ばっかり です ね' }
+
     context '半角に変換する場合' do
       it 'うまく変換される' do
         str = Moji.kuhaku(zenkaku_str)
@@ -49,6 +39,11 @@ describe Moji do
   end
 
   describe '#kuhaku_invert' do
+
+    let(:zenkaku_str) { '全角　ばっかり　です　ね' }
+    let(:hankaku_str) { '半角 ばっかり です ね' }
+    let(:kuhaku_invert_str) { '　左は全角の空白で、右は半角 ' }
+
      context '全角も半角が両方入ってる時' do
        it '両方がうまく入れ替えられること' do
          new_str = Moji.kuhaku_invert(kuhaku_invert_str)
@@ -76,6 +71,13 @@ describe Moji do
   end
 
   describe '#hiragana' do
+
+    let(:katakana_str) { 'ニンゲン　ノ　ゴジュウネン　ハ　ハカナイ　モノ　ダ。' }
+    let(:romaji_str) { 'ningen no gojuunen ha hakanai mono da.' }
+    let(:mixed_str) { 'ニンゲン　no　ごじゅうねん　ha　ハカナイ　もの　da.' }
+    let(:upcase_str) { 'NINGEN NO GOJUUNEN HA HAKANAI MONO DA.' }
+    let(:small_tsu_str) { 'chiisai tsu atta yo! atta!' }
+
     context 'ローマ字の場合' do
       it 'うまく変換されること' do
         new_str = Moji.hiragana(romaji_str)
@@ -149,6 +151,9 @@ describe Moji do
   end
 
   describe '#hiragana!' do
+
+    let(:katakana_str) { 'ニンゲン　ノ　ゴジュウネン　ハ　ハカナイ　モノ　ダ。' }
+
     context 'ミューテイトする場合' do
       it 'うまくミューテイトされること' do
         original_id = katakana_str.__id__
@@ -197,6 +202,11 @@ describe Moji do
   end
 
   describe '#kiru' do
+
+    let(:hankaku_kiru_str) { ' この 空白 は 半角だけ ' }
+    let(:zenkaku_kiru_str) { '　この　空白　は　全角　だけ　'}
+    let(:mixed_kiru_str) { ' 最初 は 半角 。　後　は　全角　' }
+
     context '半角の空白だけ' do
       it '空白はなくなること' do
         new_str = Moji.kiru(hankaku_kiru_str)
@@ -221,6 +231,9 @@ describe Moji do
   end
 
   describe '#kiru!' do
+
+    let(:zenkaku_kiru_str) { '　この　空白　は　全角　だけ　'}
+    
     context 'ミューテイトする場合' do
       it 'うまくミューテイトされること' do
         original_id = zenkaku_kiru_str.__id__
@@ -231,6 +244,12 @@ describe Moji do
   end
 
   describe '#hashigiri' do
+
+    let(:hankaku_hashigiri_str) { ' 半角の空白 ' }
+    let(:zenkaku_hashigiri_str) { '　全角の空白　' }
+    let(:kuhaku_invert_str) { '　左は全角の空白で、右は半角 ' }
+
+
     context '半角だけの場合' do
       it '端が切られること' do
         new_str = Moji.hashigiri(hankaku_hashigiri_str)
@@ -254,6 +273,11 @@ describe Moji do
   end
 
   describe '#hashigiri!' do
+
+    let(:hankaku_hashigiri_str) { ' 半角の空白 ' }
+    let(:zenkaku_hashigiri_str) { '　全角の空白　' }
+    let(:kuhaku_invert_str) { '　左は全角の空白で、右は半角 ' }
+
     context '半角だけの場合' do
       it '端が切られること' do
         new_str = Moji.hashigiri(hankaku_hashigiri_str)
