@@ -256,10 +256,58 @@ describe Moji do
 
 
   describe '#kana_invert' do
+
+    let(:hiragana_str) { 'にんげん　の　ごじゅうねん　は　はかない　もの　だ。' }
+    let(:katakana_str) { 'ニンゲン　ノ　ゴジュウネン　ハ　ハカナイ　モノ　ダ。' }
+    let(:mixed_str) { 'ニンゲン　no　ごじゅうねん　ha　ハカナイ　もの　da.' }
+    let(:inverted_mixed_str) { 'にんげん　no　ゴジュウネン　ha　はかない　モノ　da.'}
+
+    context 'かなを逆にする' do
+      it 'カタカナに変換される' do
+        new_str = Moji.kana_invert(hiragana_str)
+        expect(new_str).to eq(katakana_str)
+      end
+
+      it 'ひらがなに変換される' do
+        new_str = Moji.kana_invert(katakana_str)
+        expect(new_str).to eq(hiragana_str)
+      end
+
+      it '適切な文字だけが変換される' do
+        new_str = Moji.kana_invert(mixed_str)
+        expect(new_str).to eq(inverted_mixed_str)
+      end
+    end
+
   end
 
 
   describe '#kana_invert!' do
+
+    let(:hiragana_str) { 'にんげん　の　ごじゅうねん　は　はかない　もの　だ。' }
+    let(:katakana_str) { 'ニンゲン　ノ　ゴジュウネン　ハ　ハカナイ　モノ　ダ。' }
+
+    context 'ミューテイトする場合' do
+      it 'うまくミューテイトされること' do
+        original_id = hiragana_str.__id__
+        Moji.kana_invert!(hiragana_str)
+        expect(hiragana_str.__id__).to eq original_id
+      end
+    end
+
+    context 'オプションを渡す場合' do
+      it '別のリテラルとしてうまく定義されること' do
+        new_str = Moji.kana_invert!(hiragana_str, '-s', '--mac')
+        shift_jis_str = shift_jis(hiragana_str)
+        expect(new_str.encoding).to eq(shift_jis_str.encoding)
+      end
+      it '１つのリテラルとしてうまく定義されること' do
+        new_str = Moji.kana_invert!(hiragana_str, '-s --mac')
+        shift_jis_str = shift_jis(hiragana_str)
+        expect(new_str.encoding).to eq(hiragana_str.encoding)
+      end
+    end
+
   end
 
 

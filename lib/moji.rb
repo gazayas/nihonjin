@@ -231,11 +231,25 @@ class Moji
   end
 
   def self.kana_invert(str, *options)
-    # str = NKF.nkf('-h3' + options', str)
+
+    options = options.map do |option|
+      if option.class == Symbol
+        option = EncodingTypes[option]
+      end
+      option
+    end
+    options = options.flatten # hiragana!の*optionsが二重してしまうから
+    str_data = utf8_pass(str)
+    str = str_data[1]
+    options = options.join(' ') # optionsは空であっても文字列に変換されます
+    options = EncodingTypes[:utf_8] if options.empty?
+
+    str = NKF.nkf(('-h3 ' + options), str)
+
   end
 
   def self.kana_invert!(str, *options)
-    # str = str.sub!(str, (kana_invert(str, options)))
+    str = str.sub!(str, (kana_invert(str, options)))
   end
 
   def self.kiru(str)
