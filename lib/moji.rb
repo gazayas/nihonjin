@@ -195,10 +195,27 @@ class Moji
   end
 
   def self.katakana(str, *options)
-    # #hiraganaを読んでからnkfのメソッドを呼ぶだけでいいかな？
+
+    str = hiragana(str, options)
+
+    options = options.map do |option|
+      if option.class == Symbol
+        option = EncodingTypes[option]
+      end
+      option
+    end
+    options = options.flatten # hiragana!の*optionsが二重してしまうから
+    str_data = utf8_pass(str)
+    str = str_data[1]
+    options = options.join(' ') # optionsは空であっても文字列に変換されます
+    options = EncodingTypes[:utf_8] if options.empty?
+
+    str = NKF.nkf(('-h2 ' + options), str)
+
   end
 
   def self.katakana!(str, *options)
+    str.sub!(str, (katakana(str, options)))
   end
 
   def self.hankaku_katakana(str, *options)

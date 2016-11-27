@@ -38,6 +38,7 @@ describe Moji do
     end
   end
 
+
   describe '#kuhaku_invert' do
 
     let(:zenkaku_str) { '全角　ばっかり　です　ね' }
@@ -69,6 +70,7 @@ describe Moji do
        end
      end
   end
+
 
   describe '#hiragana' do
 
@@ -150,6 +152,7 @@ describe Moji do
     end
   end
 
+
   describe '#hiragana!' do
 
     let(:katakana_str) { 'ニンゲン　ノ　ゴジュウネン　ハ　ハカナイ　モノ　ダ。' }
@@ -175,31 +178,90 @@ describe Moji do
         expect(new_str.encoding).to eq(shift_jis_str.encoding)
       end
     end
+
   end
+
 
   describe '#katakana' do
+
+    let(:katakana_str) { 'ニンゲン　ノ　ゴジュウネン　ハ　ハカナイ　モノ　ダ。' }
+    let(:romaji_str) { 'ningen no gojuunen ha hakanai mono da.' }
+    let(:hiragana_str) { 'にんげん　の　ごじゅうねん　は　はかない　もの　だ。' }
+    let(:mixed_str) { 'ニンゲン　no　ごじゅうねん　ha　ハカナイ　もの　da.' }
+
+    context '文字をカタカナに変換する' do
+      it 'ローマ字の場合' do
+        new_str = Moji.katakana(romaji_str)
+        expect(new_str).to eq (katakana_str)
+      end
+
+      it 'ひらがなの場合' do
+        new_str = Moji.katakana(romaji_str)
+        expect(new_str).to eq (katakana_str)
+      end
+
+      it 'ミックスの場合' do
+        new_str = Moji.katakana(mixed_str)
+        expect(new_str).to eq (katakana_str)
+      end
+    end
+
   end
 
+
   describe '#katakana!' do
+
+    let(:romaji_str) { 'ningen no gojuunen ha hakanai mono da.' }
+    let(:katakana_str) { 'ニンゲン　ノ　ゴジュウネン　ハ　ハカナイ　モノ　ダ。' }
+
+    context 'ミューテイトする場合' do
+      it 'うまくミューテイトされること' do
+        original_id = romaji_str.__id__
+        Moji.katakana!(romaji_str)
+        expect(romaji_str.__id__).to eq original_id
+      end
+    end
+
+    # #katakana!でoptionsが二重（三重？）してしまうから次のテストは大事です
+    context 'オプションを渡す場合' do
+      it '別のリテラルとしてうまく定義されること' do
+        new_str = Moji.katakana!(romaji_str, '-s', '--mac')
+        shift_jis_str = shift_jis(romaji_str)
+        expect(new_str.encoding).to eq(shift_jis_str.encoding)
+      end
+      it '１つのリテラルとしてうまく定義されること' do
+        new_str = Moji.katakana!(romaji_str, '-s --mac')
+        shift_jis_str = shift_jis(romaji_str)
+        expect(new_str.encoding).to eq(romaji_str.encoding)
+      end
+    end
+
   end
+
 
   describe '#hankaku_katakana' do
   end
 
+
   describe '#hankaku_katakana!' do
   end
+
 
   describe '#romaji' do
   end
 
+
   describe '#romaji!' do
   end
+
 
   describe '#kana_invert' do
   end
 
+
   describe '#kana_invert!' do
   end
+
 
   describe '#kiru' do
 
@@ -230,6 +292,7 @@ describe Moji do
     end
   end
 
+
   describe '#kiru!' do
 
     let(:zenkaku_kiru_str) { '　この　空白　は　全角　だけ　'}
@@ -242,6 +305,7 @@ describe Moji do
       end
     end
   end
+
 
   describe '#hashigiri' do
 
@@ -271,6 +335,7 @@ describe Moji do
       end
     end
   end
+
 
   describe '#hashigiri!' do
 
