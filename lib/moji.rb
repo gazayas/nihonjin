@@ -111,6 +111,8 @@ class Moji
   # ところで[0]の方は英字で[1]の方は日本語
   Symbols = [[".", "。"], ["!", "！"], ["?", "？"]]
 
+
+
   def self.kuhaku(str, option=nil)
     str_data = utf8_pass(str)
     str = str_data[1]
@@ -126,6 +128,8 @@ class Moji
 
   def self.kuhaku!(str, option=nil)
   end
+
+
 
   def self.kuhaku_invert(str)
     str_data = utf8_pass(str)
@@ -148,8 +152,11 @@ class Moji
     new_str.encode(str_data[0])
   end
 
+
   def self.kuhaku_invert!(str)
   end
+
+
 
   # NKFのオプションを#hiraganaの方で定義すれば、Moji.hiragana()を呼ぶだけで文字列が簡単に変換されます
   # たのしいRuby299ページを参照してください
@@ -194,6 +201,8 @@ class Moji
     str.sub!(str, (hiragana(str, options)))
   end
 
+
+
   def self.katakana(str, *options)
 
     str = hiragana(str, options)
@@ -218,17 +227,23 @@ class Moji
     str.sub!(str, (katakana(str, options)))
   end
 
+
+
   def self.hankaku_katakana(str, *options)
   end
 
   def self.hankaku_katakana!(str, *options)
   end
 
+
+
   def self.romaji(str)
   end
 
   def self.romaji!(str)
   end
+
+
 
   def self.kana_invert(str, *options)
 
@@ -252,6 +267,8 @@ class Moji
     str = str.sub!(str, (kana_invert(str, options)))
   end
 
+
+
   def self.kiru(str)
     if str.match(/　/)
       str = str.gsub(/　/, " ")
@@ -262,6 +279,8 @@ class Moji
   def self.kiru!(str)
     str = str.sub(str, kiru(str))
   end
+
+
 
   def self.hashigiri(str)
     if str.match(/^　/)
@@ -276,6 +295,8 @@ class Moji
   def self.hashigiri!(str)
     str = str.sub(str, hashigiri(str))
   end
+
+
 
   private
 
