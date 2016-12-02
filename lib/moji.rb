@@ -308,3 +308,4 @@ class Moji
   end
 
 end
+
