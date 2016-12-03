@@ -220,18 +220,9 @@ module Nihonjin
       # カタカナなどが入っている時の対応
       str = hiragana(str, encoding)
 
-      # また utf8_passをしないといけないと思う
+      str_data = utf8_pass(str)
+      str = str_data[1]
 
-=begin
-      if str.match(/っ/)
-        place = str =~ /っ/
-        Hiragana.each do |h|
-          Consonants.each do |c|
-
-          end
-        end
-      end
-=end
       Hiragana.each do |key, value|
         re = Regexp.new(value)
         if str.match(re)
@@ -239,13 +230,18 @@ module Nihonjin
         end
       end
 
-      str = kuhaku(str)
-
       Symbols.each do |symbol|
         str = str.gsub(symbol[1], symbol[0])
       end
+      
+      if str =~ /っ/
+        place = str =~ /っ/
+        # 何故か代入する必要がなく...
+        small_tsu_to_romaji(str, place)
+      end
 
-      str
+      str = str.encode(str_data[0]) # ローマ字はshift_jisに変換できるかな...
+      str = kuhaku(str)
 
     end
 
@@ -315,6 +311,20 @@ module Nihonjin
       original_encoding = str.encoding
       str = str.encode("UTF-8")
       str_data = [original_encoding, str]
+    end
+
+    # 対象の文字列に「っ」が何個か続いたら、再帰的に「っ」の次の文字の子音を見つけて「っ」と代わります。
+    # 「どっっかん！」を書いたら「dokkkan!」になる 
+    def small_tsu_to_romaji(str, place)
+      if str[place + 1] =~ /[a-zA-Z]/
+        str[place] = str[place + 1]
+      else
+        if str[place + 1] == "っ"
+          str[place] = small_tsu_to_romaji(str, (place + 1))
+        else # びっくりマークなどの場合
+          str[place] = ""
+        end
+      end
     end
 
   end

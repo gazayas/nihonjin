@@ -272,6 +272,24 @@ describe Nihonjin::Moji do
 
 
   describe '#romaji!' do
+
+    let(:recursion_string) { "どっっっっかん！" }
+    let(:recursion_string2) { "ちょっ！" }
+
+    context 'ローマ字に変換されること' do
+      it '再起をテストすること' do
+        new_str = moji.romaji(recursion_string)
+        expect(new_str).to eq("dokkkkkan!")
+      end
+    end
+
+    context 'ローマ字に変換されること' do
+      it '記号が「っ」の直後にある時' do
+        new_str = moji.romaji(recursion_string2)
+        expect(new_str).to eq("cho!")
+      end
+    end    
+
   end
 
 
