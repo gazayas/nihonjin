@@ -86,7 +86,7 @@ module Nihonjin
 
     # これはちょっと見にくいから直せばいい
     # ところで[0]の方は英字で[1]の方は日本語
-    Symbols = [[".", "。"], ["!", "！"], ["?", "？"]]
+    Symbols = [[".", "。"], ["!", "！"], ["?", "？"], [",", "、"]]
 
 
     # 対象の文字列の空白を全角の空白にします
@@ -170,19 +170,18 @@ module Nihonjin
       Symbols.each do |symbol|
         str = str.gsub(symbol[0], symbol[1])
       end
-=begin
-      if str =~ /(.*)([a-zA-Z])/
-        place = str.match(/.*[a-zA-Z]/)
-        Hiragana.each do |key, value|
-          if str[place + 1] == value
-            romaji_str = key.to_s
-            str[place] = romaji_str[0]
-          end
-        end
+
+      while str =~ /([a-zA-Z])/
+        place = str =~ (/[a-zA-Z]/)
+        romaji_to_small_tsu(str, place)
       end
-=end
+
       str = NKF.nkf(('-h1 ' + options), str)
+
+      # raise error if str =~ /[a-zA-Z]/
+
       str = kuhaku(str, :zenkaku)
+      
     end
 
     def hiragana!(str, *options)
@@ -334,6 +333,19 @@ module Nihonjin
         else # びっくりマークなどの場合
           str[place] = ""
         end
+      end
+    end
+
+    # 動くけど動作が気になる
+    # できたら変えた方がいいかもしれない
+    # -1 じゃなくて + 1
+    def romaji_to_small_tsu(str, place)
+      if str[place - 1] =~ /っ/
+        str[place] = "っ"
+      elsif str[place - 1] == str[place] # 同じローマ字が続く場合
+        romaji_to_small_tsu(str, (place - 1))
+      elsif str[place + 1] == nil # "akkk"は「あっk」になってしまう。#hiraganaでエラーをraiseするように
+        str[place]
       end
     end
 

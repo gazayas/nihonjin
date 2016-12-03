@@ -95,14 +95,28 @@ describe Nihonjin::Moji do
         expect(new_str).to eq("まっちょ")
       end
     end
-=begin
+
     context 'まっっちょ' do
       it '「まっっちょ」に変換されること' do
         new_str = moji.hiragana("macccho")
         expect(new_str).to eq("まっっちょ")
       end
     end
-=end
+
+    context 'まっっっちょ' do
+      it '「まっっちょ」に変換されること' do
+        new_str = moji.hiragana("maccccho")
+        expect(new_str).to eq("まっっっちょ")
+      end
+    end
+
+    context 'まっっっちょっっって' do
+      it '「まっっっちょっっって」に変換されること' do
+        new_str = moji.hiragana("macccchotttte")
+        expect(new_str).to eq("まっっっちょっっって")
+      end
+    end
+
     context 'カタカナの場合' do
       it 'うまく変換されること' do
         new_str = moji.hiragana(katakana_str)
