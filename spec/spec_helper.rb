@@ -1,7 +1,5 @@
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require 'nihonjin'
-# require 'moji'
-# require 'suji'
 
 def utf_8(str)
   str = str.encode('UTF-8')
