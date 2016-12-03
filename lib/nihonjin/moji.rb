@@ -214,10 +214,42 @@ module Nihonjin
 
 
 
-    def romaji(str)
+    def romaji(str, encoding=:utf_8)
+
+      # すべての文字をひらがなに統一してからローマ字に変換されます
+      # カタカナなどが入っている時の対応
+      str = hiragana(str, encoding)
+
+      # また utf8_passをしないといけないと思う
+
+=begin
+      if str.match(/っ/)
+        place = str =~ /っ/
+        Hiragana.each do |h|
+          Consonants.each do |c|
+
+          end
+        end
+      end
+=end
+      Hiragana.each do |key, value|
+        re = Regexp.new(value)
+        if str.match(re)
+          str = str.gsub(re, key.to_s)
+        end
+      end
+
+      str = kuhaku(str)
+
+      Symbols.each do |symbol|
+        str = str.gsub(symbol[1], symbol[0])
+      end
+
+      str
+
     end
 
-    def romaji!(str)
+    def romaji!(str, encoding=:utf_8)
     end
 
 

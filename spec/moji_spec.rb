@@ -257,6 +257,17 @@ describe Nihonjin::Moji do
 
 
   describe '#romaji' do
+
+    let(:hiragana_str) { 'にんげん　の　ごじゅうねん　は　はかない　もの　だ。' }
+    let(:romaji_str) { 'ningen no gojuunen ha hakanai mono da.' }
+
+    context 'ローマ字に変換されること' do
+      it 'うまく変換されること' do
+        new_str = moji.romaji(hiragana_str)
+        expect(new_str).to eq(romaji_str)
+      end
+    end
+
   end
 
 
