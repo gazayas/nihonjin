@@ -1,4 +1,4 @@
-require 'nkf' # ここかなww
+require 'nkf'
 
 class Moji
 
@@ -87,7 +87,8 @@ class Moji
   Symbols = [[".", "。"], ["!", "！"], ["?", "？"]]
 
 
-
+  # 対象の文字列の空白を全角の空白にします
+  # :zenkakuをoptionとして渡せば、すべての空白は全角の空白に変換されます
   def self.kuhaku(str, option=nil)
     str_data = utf8_pass(str)
     str = str_data[1]
@@ -101,11 +102,12 @@ class Moji
     str.encode(str_data[0])
   end
 
+  # #kuhakuの文字列を破壊的に変換します
   def self.kuhaku!(str, option=nil)
   end
 
 
-
+  # 対象の文字列の全角と半角の空白を逆にします
   def self.kuhaku_invert(str)
     str_data = utf8_pass(str)
     str = str_data[1]
@@ -127,7 +129,7 @@ class Moji
     new_str.encode(str_data[0])
   end
 
-
+  # #kuhaku_invertの文字列を破壊的に変換します
   def self.kuhaku_invert!(str)
   end
 
@@ -137,9 +139,7 @@ class Moji
   # たのしいRuby299ページを参照してください
   def self.hiragana(str, *options)
     options = options.map do |option|
-      if option.class == Symbol
-        option = EncodingTypes[option]
-      end
+      option = EncodingTypes[option] if option.class == Symbol
       option
     end
     options = options.flatten # hiragana!の*optionsが二重してしまうから
@@ -275,7 +275,8 @@ class Moji
 
   private
 
-  # utf-8でない文字列の対応としては、元のエンコーディングとutf-8バージョンの文字列を配列に格納する
+  # utf-8でない文字列の対応としては、元のエンコーディングとutf-8バージョンの文字列を配列に格納して返します
+  # #hiraganaとかのメソッドの処理が終われば、文字列の元のエンコーディングに戻します。
   def self.utf8_pass(str)
     original_encoding = str.encoding
     str = str.encode("UTF-8")
@@ -283,4 +284,3 @@ class Moji
   end
 
 end
-
