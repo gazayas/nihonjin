@@ -88,6 +88,14 @@ describe Nihonjin::Moji do
       end
     end
 
+    # このように「ちょ」みたいな変数がうまく変換されるテストを書いた方がいいかもしれない
+    context 'まっちょ' do
+      it '「まっちょ」に変換されること' do
+        new_str = moji.hiragana("maccho")
+        expect(new_str).to eq("まっちょ")
+      end
+    end
+
     context 'カタカナの場合' do
       it 'うまく変換されること' do
         new_str = moji.hiragana(katakana_str)
