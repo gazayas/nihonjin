@@ -15,7 +15,7 @@ module Nihonjin
     # 最後に「あ」〜「う」を置く理由は正規表現のためです
     # また、「じゃ」〜「じょ」が最初の方にあるのもそのため
     # 小さい文字も入れないとダメだ（「っ」や「ゅ」とか）
-    HIRAGANA = {
+    Hiragana = {
       kya: "きゃ",        kyu: "きゅ",        kyo: "きょ",
       sha: "しゃ",        shu: "しゅ",        sho: "しょ",
       ja: "じゃ",         ju: "じゅ",         jo: "じょ",
@@ -49,7 +49,7 @@ module Nihonjin
 
     }
 
-    KATAKANA_HANKAKU = {
+    Katakana_hankaku = {
 
       ka: "ｶ", ki: "ｷ", ku: "ｸ", ke: "ｹ", ko: "ｺ",
       sa: "ｻ", shi: "ｼ", su: "ｽ", se: "ｾ", so: "ｿ",
@@ -159,10 +159,10 @@ module Nihonjin
       end
 
       # ローマ字の場合
-      HIRAGANA.each do |key, value|
+      Hiragana.each do |key, value|
         re = Regexp.new(key.to_s)
         if str.match(re)
-          str = str.gsub(re, HIRAGANA[key])
+          str = str.gsub(re, Hiragana[key])
         end
       end
 

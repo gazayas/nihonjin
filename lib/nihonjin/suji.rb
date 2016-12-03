@@ -2,11 +2,11 @@ module Nihonjin
 
   class Suji
 
-    HANKAKU = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-    ZENKAKU = ["０", "１" , "２", "３", "４", "５", "６", "７", "８", "９"]
-    KANJI = ["〇", "一", "二", "三", "四", "五", "六", "七", "八", "九"]
-    DAIJI = ["零", "壱", "弐", "参", "肆", "伍", "陸", "漆", "捌", "玖"]
-    DAISU = ["万", "億", "兆", "京", "垓", "𥝱", "穣", "溝", "澗", "正", "載", "極"]
+    Hankaku = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    Zenkaku = ["０", "１" , "２", "３", "４", "５", "６", "７", "８", "９"]
+    Kanji = ["〇", "一", "二", "三", "四", "五", "六", "七", "八", "九"]
+    Daiji = ["零", "壱", "弐", "参", "肆", "伍", "陸", "漆", "捌", "玖"]
+    Daisu = ["万", "億", "兆", "京", "垓", "𥝱", "穣", "溝", "澗", "正", "載", "極"]
     # "恒河沙", "阿僧祇", "那由他", "不可思議", "無量大数" => こういうのを入れたかったら、扱いが変わらないとダメだ（長さは1じゃないから）
     
     # 大数の読み方もあればいいかな
@@ -15,7 +15,7 @@ module Nihonjin
     # ユーザも使えるようにpublicにしました
     def type?(num)
       num = num.to_s
-      constants = [HANKAKU, ZENKAKU, KANJI, DAIJI]
+      constants = [Hankaku, Zenkaku, Kanji, Daiji]
       type = nil
       constants.each do |constant|
         10.times do |n|
@@ -26,13 +26,13 @@ module Nihonjin
           end
         end
       end
-      if type == ZENKAKU
+      if type == Zenkaku
         "全角"
-      elsif type == KANJI
+      elsif type == Kanji
         "漢字"
-      elsif type == DAIJI
+      elsif type == Daiji
         "大字"
-      elsif type == HANKAKU
+      elsif type == Hankaku
         "半角"
       else
         ""
@@ -48,25 +48,25 @@ module Nihonjin
     def hankaku(num)
       type = type?(num)
       return num.to_i if type == "半角"
-      num = converter(num, type, HANKAKU)    
+      num = converter(num, type, Hankaku)    
     end
 
     def zenkaku(num)
       type = type?(num)
       return num if type == "全角"
-      num = converter(num, type, ZENKAKU)
+      num = converter(num, type, Zenkaku)
     end
 
     def kanji(num)
       type = type?(num)
       return num if type == "漢字"
-      num = converter(num, type, KANJI)
+      num = converter(num, type, Kanji)
     end
 
     def daiji(num)
       type = type?(num)
       return num if type == "大字"
-      num = converter(num, type, DAIJI)
+      num = converter(num, type, Daiji)
     end
 
     def kanji_henkan(num)
@@ -103,9 +103,9 @@ module Nihonjin
 
       num = String.new
       kanji_array.length.times do |n|
-        num[0, 0] += DAISU[n] + kanji_array[-(n + 1)]
+        num[0, 0] += Daisu[n] + kanji_array[-(n + 1)]
       end
-      DAISU.each do |ds|
+      Daisu.each do |ds|
         regexp_str = "^" + ds
         regexp = Regexp.new(regexp_str)
         if num =~ regexp
@@ -115,9 +115,9 @@ module Nihonjin
 
       # 数字は「一兆億万」とかにならなくて「一兆」みたいになるように
       num.length.times do |n|
-        DAISU.each do |ds|
+        Daisu.each do |ds|
           if num[n] == ds
-            if num[n + 1] == DAISU[(DAISU.index(ds)) - 1]
+            if num[n + 1] == Daisu[(Daisu.index(ds)) - 1]
               num[n + 1] = ""
             end
           end
@@ -137,13 +137,13 @@ module Nihonjin
       num = num.to_s
       case type
       when "全角"
-        type = ZENKAKU
+        type = Zenkaku
       when "漢字"
-        type = KANJI
+        type = Kanji
       when "大字"
-        type = DAIJI
+        type = Daiji
       else
-        type = HANKAKU
+        type = Hankaku
       end
       10.times do |n|
         regexp = Regexp.new(type[n].to_s)
