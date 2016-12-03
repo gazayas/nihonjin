@@ -166,10 +166,21 @@ module Nihonjin
         end
       end
 
+      # びっくりマークなどを日本語の文字にします
       Symbols.each do |symbol|
         str = str.gsub(symbol[0], symbol[1])
       end
-
+=begin
+      if str =~ /(.*)([a-zA-Z])/
+        place = str.match(/.*[a-zA-Z]/)
+        Hiragana.each do |key, value|
+          if str[place + 1] == value
+            romaji_str = key.to_s
+            str[place] = romaji_str[0]
+          end
+        end
+      end
+=end
       str = NKF.nkf(('-h1 ' + options), str)
       str = kuhaku(str, :zenkaku)
     end
@@ -234,10 +245,9 @@ module Nihonjin
         str = str.gsub(symbol[1], symbol[0])
       end
       
-      if str =~ /っ/
+      while str =~ /っ/
         place = str =~ /っ/
-        # 何故か代入する必要がなく...
-        small_tsu_to_romaji(str, place)
+        small_tsu_to_romaji(str, place) # 何故か代入する必要がなく...
       end
 
       str = str.encode(str_data[0]) # ローマ字はshift_jisに変換できるかな...

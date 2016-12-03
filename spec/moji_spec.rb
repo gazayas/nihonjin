@@ -95,7 +95,14 @@ describe Nihonjin::Moji do
         expect(new_str).to eq("まっちょ")
       end
     end
-
+=begin
+    context 'まっっちょ' do
+      it '「まっっちょ」に変換されること' do
+        new_str = moji.hiragana("macccho")
+        expect(new_str).to eq("まっっちょ")
+      end
+    end
+=end
     context 'カタカナの場合' do
       it 'うまく変換されること' do
         new_str = moji.hiragana(katakana_str)
@@ -274,7 +281,8 @@ describe Nihonjin::Moji do
   describe '#romaji!' do
 
     let(:recursion_string) { "どっっっっかん！" }
-    let(:recursion_string2) { "ちょっ！" }
+    let(:recursion_string2) { "やっっちゃっった！" }
+    let(:recursion_string3) { "ちょっ！まてよ！" }
 
     context 'ローマ字に変換されること' do
       it '再起をテストすること' do
@@ -283,10 +291,17 @@ describe Nihonjin::Moji do
       end
     end
 
+    context '区切りで' do
+      it 'うまく変換されること' do
+        new_str = moji.romaji(recursion_string2)
+        expect(new_str).to eq("yaccchattta!")
+      end
+    end
+
     context 'ローマ字に変換されること' do
       it '記号が「っ」の直後にある時' do
-        new_str = moji.romaji(recursion_string2)
-        expect(new_str).to eq("cho!")
+        new_str = moji.romaji(recursion_string3)
+        expect(new_str).to eq("cho!mateyo!")
       end
     end    
 
