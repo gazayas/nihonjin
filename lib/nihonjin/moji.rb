@@ -4,28 +4,27 @@ module Nihonjin
 
   class Moji
 
-    # 特別な文字：
-    # ji2: "ぢ", fa: "ファ", fi: "フィ", fe: "フェ", fo: "フォ", ディ: "di"
-    # 小さい方も追加したです
-    # 「ヰ」と「ヱ」の半角はないらしいです：
-    # http://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q1024671115sad
-    # https://ja.wikipedia.org/wiki/JIS_X_0201
-    # その代り、半角の「エ」と「イ」を使ったらいいかな
-
-    # 最後に「あ」〜「う」を置く理由は正規表現のためです
-    # また、「じゃ」〜「じょ」が最初の方にあるのもそのため
-    # 小さい文字も入れないとダメだ（「っ」や「ゅ」とか）
     Hiragana = {
       kya: "きゃ",        kyu: "きゅ",        kyo: "きょ",
-      sha: "しゃ",        shu: "しゅ",        sho: "しょ",
-      ja: "じゃ",         ju: "じゅ",         jo: "じょ",
+      sha: "しゃ",        shu: "しゅ", she: "しぇ", sho: "しょ",
       cha: "ちゃ",        chu: "ちゅ",        cho: "ちょ",
-      ja2: "ぢゃ",        ju2: "ぢゅ",        jo2: "ぢょ", # この欄は要る？
+      dya: "ぢゃ",        dyu: "ぢゅ",        dyo: "ぢょ",
       nya: "にゃ",        nyu: "にゅ",        nyo: "にょ",
+      hya: "ひゃ",        hyu: "ひゅ",        hyo: "ひょ",
+      mya: "みゃ",        myu: "みゅ",        myo: "みょ",
+      rya: "りゃ",        ryu: "りゅ",        ryo: "りょ",
+
+      gya: "ぎゃ",        gyu: "ぎゅ",        gyo: "ぎょ",
+      ja: "じゃ",         ju: "じゅ", je: "じぇ", jo: "じょ",
+      jya: "じゃ",         jyu: "じゅ",       jyo: "じょ",
+      bya: "びゃ",        byu: "びゅ",        byo: "びょ",
+
+      pya: "ぴゃ",        pyu: "ピュ",        pyo: "ぴょ",
+
       tsu: "つ",
-      # あとは「ひゃ」とか「びゃ」とかはまだ。。。
+
       ka: "か", ki: "き", ku: "く", ke: "け", ko: "こ",
-      sa: "さ", shi: "し", su: "す", se: "せ", so: "そ",
+      sa: "さ", si: "し", shi: "し", su: "す", se: "せ", so: "そ",
       ta: "た", chi: "ち", te: "て", to: "と",
       na: "な", ni: "に", nu: "ぬ", ne: "ね", no: "の",
       ha: "は", hi: "ひ", fu: "ふ", he: "へ", ho: "ほ",
@@ -33,46 +32,26 @@ module Nihonjin
       ya: "や",           yu: "ゆ",          yo: "よ",
       ra: "ら", ri: "り", ru: "る", re: "れ", ro: "ろ",
       wa: "わ", wi: "ゐ",           we: "ゑ", wo: "を",
-      n: "ん",
+      n: "ん", n_: "ん", # 「n_」はんに（範囲）とかを書くために。Issue #16を見てください
 
-      v: "ゔ",
+      va: "ゔぁ", vi: "ゔぃ", vu: "ゔ", ve: "ゔぇ", vo: "ゔぉ",
       ga: "が", gi: "ぎ", gu: "ぐ", ge: "げ", go: "ご",
       za: "ざ", ji: "じ", zu: "ず", ze: "ぜ", zo: "ぞ",
-      da: "だ", ji2: "ぢ", dzu: "づ", de: "で", do: "ど",
-
+      da: "だ", di: "ぢ", du: "づ", de: "で", do: "ど",
+                        dzu: "づ",
       ba: "ば", bi: "び", bu: "ぶ", be: "べ", bo: "ぼ",
       pa: "ぱ", pi: "ぴ", pu: "ぷ", pe: "ぺ", po: "ぽ",
 
       fa: "ふぁ", fi: "ふぃ", fe: "ふぇ", fo: "ふぉ",
-      di: "でぃ",
+                 di_: "でぃ",
       a: "あ", i: "い", u: "う", e: "え", o: "お",
-
+                       wu: "う"
     }
 
-    Katakana_hankaku = {
-
-      ka: "ｶ", ki: "ｷ", ku: "ｸ", ke: "ｹ", ko: "ｺ",
-      sa: "ｻ", shi: "ｼ", su: "ｽ", se: "ｾ", so: "ｿ",
-      ta: "ﾀ", chi: "ﾁ", tsu: "ﾂ", te: "ﾃ", to: "ﾄ",
-      na: "ﾅ", ni: "ﾆ", nu: "ﾇ", ne: "ﾈ", no: "ﾉ",
-      ha: "ﾊ", hi: "ﾋ", fu: "ﾌ", he: "ﾍ", ho: "ﾎ",
-      ma: "ﾏ", mi: "ﾐ", mu: "ﾑ", me: "ﾒ", mo: "ﾓ",
-      ya: "ﾔ",           yu: "ﾕ",          yo: "ﾖ",
-      ra: "ﾗ", ri: "ﾘ", ru: "ﾙ", re: "ﾚ", ro: "ﾛ",
-      wa: "ﾜ", wi: "",           we: "", wo: "ｦ",
-      n: "",
-
-      v: "ｳﾞ",
-      ga: "ｶﾞ", gi: "ｷﾞ", gu: "ｸﾞ", ge: "ｹﾞ", go: "ｺﾞ",
-      za: "ｻﾞ", ji: "ｼﾞ", zu: "ｽﾞ", ze: "ｾﾞ", zo: "ｿﾞ",
-      da: "ﾀﾞ", ji2: "ﾁﾞ", dzu: "ﾂﾞ", de: "ﾃﾞ", do: "ﾄﾞ",
-      ba: "ﾊﾞ", bi: "ﾋﾞ", bu: "ﾌﾞ", be: "ﾍﾞ", bo: "ﾎﾞ",
-
-      pa: "ﾊﾟ", pi: "ﾋﾟ", pu: "ﾌﾟ", pe: "ﾍﾟ", po: "ﾎﾟ",
-
-      fa: "ﾌｧ", fi: "ﾌｨ", fe: "ﾌｪ", fo: "ﾌｫ",
-      di: "ﾃﾞｨ",
-      a: "ｱ", i: "ｲ", u: "ｳ", e: "ｴ", o: "ｵ"
+    Small_hiragana = {
+      ya: "ゃ",          yu: "ゅ",           yo: "ょ",
+      a: "ぁ", i: "ぃ", u: "ぅ", e: "ぇ", o: "ぉ",
+      tsu: "っ"
     }
 
     EncodingTypes = {
@@ -181,7 +160,7 @@ module Nihonjin
       # raise error if str =~ /[a-zA-Z]/
 
       str = kuhaku(str, :zenkaku)
-      
+
     end
 
     def hiragana!(str, *options)
@@ -217,6 +196,23 @@ module Nihonjin
 
 
     def hankaku_katakana(str, *options)
+
+      str = katakana(str, options)
+
+      options = options.map do |option|
+        if option.class == Symbol
+          option = EncodingTypes[option]
+        end
+        option
+      end
+      options = options.flatten # hiragana!の*optionsが二重してしまうから
+      str_data = utf8_pass(str)
+      str = str_data[1]
+      options = options.join(' ') # optionsは空であっても文字列に変換されます
+      options = EncodingTypes[:utf_8] if options.empty?
+
+      str = NKF.nkf(('-Z4 ' + options), str)
+
     end
 
     def hankaku_katakana!(str, *options)
@@ -243,10 +239,10 @@ module Nihonjin
       Symbols.each do |symbol|
         str = str.gsub(symbol[1], symbol[0])
       end
-      
+
       while str =~ /っ/
         place = str =~ /っ/
-        small_tsu_to_romaji(str, place) # 何故か代入する必要がなく...
+        small_tsu_to_romaji(str, place)
       end
 
       str = str.encode(str_data[0]) # ローマ字はshift_jisに変換できるかな...
@@ -322,8 +318,8 @@ module Nihonjin
       str_data = [original_encoding, str]
     end
 
-    # 対象の文字列に「っ」が何個か続いたら、再帰的に「っ」の次の文字の子音を見つけて「っ」と代わります。
-    # 「どっっかん！」を書いたら「dokkkan!」になる 
+    # 再帰的に対象の文字列に「っ」が何個か続いたら、「っ」の次の文字の（ローマ字の）子音を見つけて「っ」と代えます。
+    # 「どっっかん！」を書いたら「dokkkan!」になる
     def small_tsu_to_romaji(str, place)
       if str[place + 1] =~ /[a-zA-Z]/
         str[place] = str[place + 1]

@@ -270,6 +270,34 @@ describe Nihonjin::Moji do
 
 
   describe '#hankaku_katakana' do
+
+    let(:hiragana_str) { 'にんげん　の　ごじゅうねん　は　はかない　もの　だ。' }
+    let(:romaji_str) { 'ningen no gojuunen ha hakanai mono da.' }
+    let(:mixed_str) { 'ニンゲン　no　ごじゅうねん　ha　ハカナイ　もの　da.' }
+    let(:hankaku_katakana_str) { 'ﾆﾝｹﾞﾝ　ﾉ　ｺﾞｼﾞｭｳﾈﾝ　ﾊ　ﾊｶﾅｲ　ﾓﾉ　ﾀﾞ｡' }
+
+
+    context 'ひらがなを変えること' do
+      it '半角カタカナに変換されること' do
+        new_str = moji.hankaku_katakana(hiragana_str)
+        expect(new_str).to eq(hankaku_katakana_str)
+      end
+    end
+
+    context 'ローマ字を変えること' do
+      it '半角カタカナに変換されること' do
+        new_str = moji.hankaku_katakana(romaji_str)
+        expect(new_str).to eq(hankaku_katakana_str)
+      end
+    end
+
+    context 'ミックスの文字列を変えること' do
+      it '半角カタカナに変換されること' do
+        new_str = moji.hankaku_katakana(mixed_str)
+        expect(new_str).to eq(hankaku_katakana_str)
+      end
+    end
+
   end
 
 
@@ -317,7 +345,7 @@ describe Nihonjin::Moji do
         new_str = moji.romaji(recursion_string3)
         expect(new_str).to eq("cho!mateyo!")
       end
-    end    
+    end
 
   end
 
@@ -411,7 +439,7 @@ describe Nihonjin::Moji do
   describe '#kiru!' do
 
     let(:zenkaku_kiru_str) { '　この　空白　は　全角　だけ　'}
-    
+
     context 'ミューテイトする場合' do
       it 'うまくミューテイトされること' do
         original_id = zenkaku_kiru_str.__id__
