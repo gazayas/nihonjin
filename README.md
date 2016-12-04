@@ -4,20 +4,29 @@
 
 このgemはまだできてないし、公開してないけど、次のことがしたいです。
 
-３つのクラスを作りたい<br/>
-`Suji`<br/>
-`Moji`<br/>
-`Toshi`<br/>
-
 ## Moji 文字
 
-### いちいちnkfのオプションを調べるのはめんどいなんで、`Moji`で簡単に定義することができます
+### いちいちnkfのオプションを調べるのは面倒くさいから、`Moji`で簡単に定義することができます
 ```ruby
 moji = Nihonjin::Moji.new
 moji.hiragana("hiragana ni naru.")
 #=> "ひらがな　に　なる。"
 moji.hiragana("ヒラガナ　ニ　ナル。")
 #=> "ひらがな　に　なる。"
+moji.katakana("かたかな　に　なる")
+#=> "カタカナ　ニ　ナル"
+moji.hankaku_katakana("hankaku katakana ni naru")
+#=> "ﾊﾝｶｸ　ｶﾀｶﾅ　ﾆ　ﾅﾙ"
+
+# Rubyではstripはありますが、日本語の文字に対応していないです
+# 次のメソッドを使うと便利です
+moji.hashigiri("     端　に　ある　空白　を　切り落とす　　　　")
+#=> "端　に　ある　空白　を　切り落とす"
+
+# すべての空白を切り落とすこともできる
+moji.kiru("余計な　空白　を　切り落とす")
+#=> "余計な空白を切り落とす"
+
 
 
 # 出力コードもシンボルとして定義できます
@@ -95,7 +104,3 @@ p suji.to_i("参零壱")
 <a href="http://www.geocities.jp/f9305710/kazu.html">リンク</a>
 
 ###<a href="https://ja.wikipedia.org/wiki/%E5%A4%A7%E5%AD%97_(%E6%95%B0%E5%AD%97)">このリンク</a>を参考にしてください
-
-## Toshi 年
-
-まだ実装してないです
