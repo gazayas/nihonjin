@@ -145,12 +145,20 @@ describe Nihonjin::Moji do
       end
     end
 
+    #context '小さい文字' do
+    #  it 'x を入力したら文字が小さくなる' do
+    #    new_str = moji.hiragana("umaku ikeru kanaxa")
+    #    expect(new_str).to eq("うまく　いける　かなぁ")
+    #  end
+    #end
+
     context 'ミューテイトしない場合' do
       it '変数はミューテイトしないこと' do
         original_id = katakana_str.__id__
         new_str = moji.hiragana(katakana_str)
         expect(new_str.__id__).not_to eq original_id
       end
+
     end
 
     describe 'オプションを渡す場合' do

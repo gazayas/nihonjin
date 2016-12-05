@@ -67,55 +67,6 @@ module Nihonjin
     # ところで[0]の方は英字で[1]の方は日本語
     Symbols = [[".", "。"], ["!", "！"], ["?", "？"], [",", "、"]]
 
-
-    # 対象の文字列の空白を全角の空白にします
-    # :zenkakuをoptionとして渡せば、すべての空白は全角の空白に変換されます
-    def kuhaku(str, option=nil)
-      str_data = utf8_pass(str)
-      str = str_data[1]
-
-      # :double というオプションを入れたい。nkfの-Z2のこと
-      if option == :zenkaku
-        str = str.gsub(/\s/, "　") # 全角に変える
-      else
-        str = str.gsub(/　/, " ") # 普通の空白に変える
-      end
-      str.encode(str_data[0])
-    end
-
-    # #kuhakuの文字列を破壊的に変換します
-    def kuhaku!(str, option=nil)
-    end
-
-
-    # 対象の文字列の全角と半角の空白を逆にします
-    def kuhaku_invert(str)
-      str_data = utf8_pass(str)
-      str = str_data[1]
-
-      str = str.split("")
-      str = str.map do |s|
-        if s =~ /\s/ # 半角であれば
-          s = "　" # 全角に
-        elsif s =~ /　/ # 全角であれば
-          s = " " # 半角に
-        else
-          s
-        end
-      end
-      new_str = String.new
-      str.each do |s|
-        new_str += s
-      end
-      new_str.encode(str_data[0])
-    end
-
-    # #kuhaku_invertの文字列を破壊的に変換します
-    def kuhaku_invert!(str)
-    end
-
-
-
     # NKFのオプションを#hiraganaの方で定義すれば、Moji.hiragana()を呼ぶだけで文字列が簡単に変換されます
     # たのしいRuby299ページを参照してください
     def hiragana(str, *options)
@@ -304,6 +255,54 @@ module Nihonjin
 
     def hashigiri!(str)
       str = str.sub(str, hashigiri(str))
+    end
+
+
+
+    # 対象の文字列の空白を全角の空白にします
+    # :zenkakuをoptionとして渡せば、すべての空白は全角の空白に変換されます
+    def kuhaku(str, option=nil)
+      str_data = utf8_pass(str)
+      str = str_data[1]
+
+      # :double というオプションを入れたい。nkfの-Z2のこと
+      if option == :zenkaku
+        str = str.gsub(/\s/, "　") # 全角に変える
+      else
+        str = str.gsub(/　/, " ") # 普通の空白に変える
+      end
+      str.encode(str_data[0])
+    end
+
+    # #kuhakuの文字列を破壊的に変換します
+    def kuhaku!(str, option=nil)
+    end
+
+
+    # 対象の文字列の全角と半角の空白を逆にします
+    def kuhaku_invert(str)
+      str_data = utf8_pass(str)
+      str = str_data[1]
+
+      str = str.split("")
+      str = str.map do |s|
+        if s =~ /\s/ # 半角であれば
+          s = "　" # 全角に
+        elsif s =~ /　/ # 全角であれば
+          s = " " # 半角に
+        else
+          s
+        end
+      end
+      new_str = String.new
+      str.each do |s|
+        new_str += s
+      end
+      new_str.encode(str_data[0])
+    end
+
+    # #kuhaku_invertの文字列を破壊的に変換します
+    def kuhaku_invert!(str)
     end
 
 
