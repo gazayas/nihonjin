@@ -72,7 +72,7 @@ module Nihonjin
     def hiragana(str, *options)
       
       options = setup options
-      str_data = utf8_pass(str)
+      str_data = utf_8_pass(str)
       str = str_data[1]
       
       str = str.downcase
@@ -118,7 +118,7 @@ module Nihonjin
     def katakana(str, *options)
       str = hiragana(str, options)
       options = setup options
-      str_data = utf8_pass(str)
+      str_data = utf_8_pass(str)
       str = str_data[1]
       str = NKF.nkf(('-h2 ' + options), str)
     end
@@ -132,7 +132,7 @@ module Nihonjin
     def hankaku_katakana(str, *options)
       str = katakana(str, options)
       options = setup options
-      str_data = utf8_pass(str)
+      str_data = utf_8_pass(str)
       str = str_data[1]
       str = NKF.nkf(('-Z4 ' + options), str)
     end
@@ -148,7 +148,7 @@ module Nihonjin
       # カタカナなどが入っている時の対応
       str = hiragana(str, encoding)
 
-      str_data = utf8_pass(str)
+      str_data = utf_8_pass(str)
       str = str_data[1]
 
       Hiragana.each do |key, value|
@@ -179,7 +179,7 @@ module Nihonjin
 
     def kana_invert(str, *options)
       options = setup options
-      str_data = utf8_pass(str)
+      str_data = utf_8_pass(str)
       str = str_data[1]
       str = NKF.nkf(('-h3 ' + options), str)
 
@@ -223,7 +223,7 @@ module Nihonjin
     # 対象の文字列の空白を全角の空白にします
     # :zenkakuをoptionとして渡せば、すべての空白は全角の空白に変換されます
     def kuhaku(str, option=nil)
-      str_data = utf8_pass(str)
+      str_data = utf_8_pass(str)
       str = str_data[1]
 
       # :double というオプションを入れたい。nkfの-Z2のこと
@@ -242,7 +242,7 @@ module Nihonjin
 
     # 対象の文字列の全角と半角の空白を逆にします
     def kuhaku_invert(str)
-      str_data = utf8_pass(str)
+      str_data = utf_8_pass(str)
       str = str_data[1]
 
       str = str.split("")
@@ -283,7 +283,7 @@ module Nihonjin
 
     # utf-8でない文字列の対応としては、元のエンコーディングとutf-8バージョンの文字列を配列に格納して返します
     # #hiraganaとかのメソッドの処理が終われば、文字列の元のエンコーディングに戻します。
-    def utf8_pass(str)
+    def utf_8_pass(str)
       original_encoding = str.encoding
       str = str.encode("UTF-8")
       str_data = [original_encoding, str]
