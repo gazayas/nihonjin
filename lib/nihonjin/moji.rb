@@ -70,16 +70,11 @@ module Nihonjin
     # NKFのオプションを#hiraganaの方で定義すれば、Moji.hiragana()を呼ぶだけで文字列が簡単に変換されます
     # たのしいRuby299ページを参照してください
     def hiragana(str, *options)
-      options = options.map do |option|
-        option = EncodingTypes[option] if option.class == Symbol
-        option
-      end
-      options = options.flatten # hiragana!の*optionsが二重してしまうから
+      
+      options = setup options
       str_data = utf8_pass(str)
       str = str_data[1]
-      options = options.join(' ') # optionsは空であっても文字列に変換されます
-      options = EncodingTypes[:utf_8] if options.empty?
-
+      
       str = str.downcase
 
       Consonants.each do |c|
@@ -121,23 +116,11 @@ module Nihonjin
 
 
     def katakana(str, *options)
-
       str = hiragana(str, options)
-
-      options = options.map do |option|
-        if option.class == Symbol
-          option = EncodingTypes[option]
-        end
-        option
-      end
-      options = options.flatten # hiragana!の*optionsが二重してしまうから
+      options = setup options
       str_data = utf8_pass(str)
       str = str_data[1]
-      options = options.join(' ') # optionsは空であっても文字列に変換されます
-      options = EncodingTypes[:utf_8] if options.empty?
-
       str = NKF.nkf(('-h2 ' + options), str)
-
     end
 
     def katakana!(str, *options)
@@ -147,23 +130,11 @@ module Nihonjin
 
 
     def hankaku_katakana(str, *options)
-
       str = katakana(str, options)
-
-      options = options.map do |option|
-        if option.class == Symbol
-          option = EncodingTypes[option]
-        end
-        option
-      end
-      options = options.flatten # hiragana!の*optionsが二重してしまうから
+      options = setup options
       str_data = utf8_pass(str)
       str = str_data[1]
-      options = options.join(' ') # optionsは空であっても文字列に変換されます
-      options = EncodingTypes[:utf_8] if options.empty?
-
       str = NKF.nkf(('-Z4 ' + options), str)
-
     end
 
     def hankaku_katakana!(str, *options)
@@ -207,19 +178,9 @@ module Nihonjin
 
 
     def kana_invert(str, *options)
-
-      options = options.map do |option|
-        if option.class == Symbol
-          option = EncodingTypes[option]
-        end
-        option
-      end
-      options = options.flatten # hiragana!の*optionsが二重してしまうから
+      options = setup options
       str_data = utf8_pass(str)
       str = str_data[1]
-      options = options.join(' ') # optionsは空であっても文字列に変換されます
-      options = EncodingTypes[:utf_8] if options.empty?
-
       str = NKF.nkf(('-h3 ' + options), str)
 
     end
@@ -308,6 +269,17 @@ module Nihonjin
 
 
     private
+
+    def setup(options)
+      options = options.flatten
+      options = options.map do |option|
+        option = EncodingTypes[option] if option.class == Symbol
+        option
+      end
+      options = options.join(' ')
+      options = EncodingTypes[:utf_8] if options.empty?
+      options
+    end
 
     # utf-8でない文字列の対応としては、元のエンコーディングとutf-8バージョンの文字列を配列に格納して返します
     # #hiraganaとかのメソッドの処理が終われば、文字列の元のエンコーディングに戻します。
