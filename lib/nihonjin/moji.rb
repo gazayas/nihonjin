@@ -22,9 +22,10 @@ module Nihonjin
       pya: "ぴゃ",        pyu: "ピュ",        pyo: "ぴょ",
 
       tsu: "つ",
+      tu: "つ",
 
       ka: "か", ki: "き", ku: "く", ke: "け", ko: "こ",
-      sa: "さ", si: "し", shi: "し", su: "す", se: "せ", so: "そ",
+      sa: "さ", si: "し", shi: "し", si: "し", su: "す", se: "せ", so: "そ",
       ta: "た", chi: "ち", te: "て", to: "と",
       na: "な", ni: "に", nu: "ぬ", ne: "ね", no: "の",
       ha: "は", hi: "ひ", fu: "ふ", he: "へ", ho: "ほ",
@@ -137,6 +138,8 @@ module Nihonjin
       str_data = utf_8_pass(str)
       str = str_data[:string]
       str = NKF.nkf(('-h2 ' + options), str)
+      str = str.encode(str_data[:encoding].name) if options.empty?
+      str
     end
 
     def katakana!(str, *options)
@@ -151,6 +154,8 @@ module Nihonjin
       str_data = utf_8_pass(str)
       str = str_data[:string]
       str = NKF.nkf(('-Z4 ' + options), str)
+      str = str.encode(str_data[:encoding].name) if options.empty?
+      str
     end
 
     def hankaku_katakana!(str, *options)
@@ -183,8 +188,10 @@ module Nihonjin
         small_tsu_to_romaji(str, place)
       end
 
-      # str = str.encode(str_data[:encoding].name) # ローマ字はshift_jisに変換できるかな...
       str = kuhaku(str)
+
+      # str = str.encode(str_data[:encoding].name) # ローマ字はshift_jisに変換できるかな...
+      str.encode(str_data[:encoding].name)
 
     end
 
@@ -198,7 +205,8 @@ module Nihonjin
       str_data = utf_8_pass(str)
       str = str_data[:string]
       str = NKF.nkf(('-h3 ' + options), str)
-
+      str = str.encode(str_data[:encoding].name) if options.empty?
+      str
     end
 
     def kana_invert!(str, *options)
@@ -275,7 +283,7 @@ module Nihonjin
       str.each do |s|
         new_str += s
       end
-      new_str.encode(str_data[:encoding].name)
+      new_str = new_str.encode(str_data[:encoding].name)
     end
 
     # #kuhaku_invertの文字列を破壊的に変換します
