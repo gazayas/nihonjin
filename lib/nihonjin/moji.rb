@@ -73,17 +73,17 @@ module Nihonjin
       
       options = setup options
       str_data = utf_8_pass(str)
-      str = str_data[1]
-      
+      str = str_data[:string]
       str = str.downcase
 
+      # "matte"みたいな文字列を「まって」に変えるために
       Consonants.each do |c|
         if str.match(c)
           str = str.gsub(c, ("っ" + c[0]))
         end
       end
 
-      # ローマ字の場合
+      # 対象の文字列にはローマ字がある場合
       Hiragana.each do |key, value|
         re = Regexp.new(key.to_s)
         if str.match(re)
@@ -96,16 +96,32 @@ module Nihonjin
         str = str.gsub(symbol[0], symbol[1])
       end
 
+      # 「x」を文字の前に入れることで、自由に小さいひらがなを定義することができる
+      if str =~ /x/
+        place = str =~ /x/
+        str[place + 1] = Small_hiragana[Hiragana.key(str[place + 1])]
+        str[place] = ""
+      end
+
+      # while文が良くないかもしれない
+      # 最後に/([a-zA-Z])/にマッチしてしまったらエラーを返したいけど、
+      # while文だと、もしそのエラーを生じるはずのものが次のwhile文に入っていたら、
+      # while文を出ることはない。それは困る。
       while str =~ /([a-zA-Z])/
         place = str =~ (/[a-zA-Z]/)
         romaji_to_small_tsu(str, place)
       end
 
+      str = kuhaku(str, :zenkaku)
+
       str = NKF.nkf(('-h1 ' + options), str)
+
+      # もしoptionsを定義しなかったら、文字列のオリジナルの文字コードにします
+      str.encode(str_data[:encoding].name) if options.empty?
 
       # raise error if str =~ /[a-zA-Z]/
 
-      str = kuhaku(str, :zenkaku)
+      str
 
     end
 
@@ -119,7 +135,7 @@ module Nihonjin
       str = hiragana(str, options)
       options = setup options
       str_data = utf_8_pass(str)
-      str = str_data[1]
+      str = str_data[:string]
       str = NKF.nkf(('-h2 ' + options), str)
     end
 
@@ -133,7 +149,7 @@ module Nihonjin
       str = katakana(str, options)
       options = setup options
       str_data = utf_8_pass(str)
-      str = str_data[1]
+      str = str_data[:string]
       str = NKF.nkf(('-Z4 ' + options), str)
     end
 
@@ -149,7 +165,7 @@ module Nihonjin
       str = hiragana(str, encoding)
 
       str_data = utf_8_pass(str)
-      str = str_data[1]
+      str = str_data[:string]
 
       Hiragana.each do |key, value|
         re = Regexp.new(value)
@@ -167,7 +183,7 @@ module Nihonjin
         small_tsu_to_romaji(str, place)
       end
 
-      str = str.encode(str_data[0]) # ローマ字はshift_jisに変換できるかな...
+      # str = str.encode(str_data[:encoding].name) # ローマ字はshift_jisに変換できるかな...
       str = kuhaku(str)
 
     end
@@ -180,7 +196,7 @@ module Nihonjin
     def kana_invert(str, *options)
       options = setup options
       str_data = utf_8_pass(str)
-      str = str_data[1]
+      str = str_data[:string]
       str = NKF.nkf(('-h3 ' + options), str)
 
     end
@@ -224,7 +240,7 @@ module Nihonjin
     # :zenkakuをoptionとして渡せば、すべての空白は全角の空白に変換されます
     def kuhaku(str, option=nil)
       str_data = utf_8_pass(str)
-      str = str_data[1]
+      str = str_data[:string]
 
       # :double というオプションを入れたい。nkfの-Z2のこと
       if option == :zenkaku
@@ -232,7 +248,7 @@ module Nihonjin
       else
         str = str.gsub(/　/, " ") # 普通の空白に変える
       end
-      str.encode(str_data[0])
+      str.encode(str_data[:encoding].name)
     end
 
     # #kuhakuの文字列を破壊的に変換します
@@ -243,7 +259,7 @@ module Nihonjin
     # 対象の文字列の全角と半角の空白を逆にします
     def kuhaku_invert(str)
       str_data = utf_8_pass(str)
-      str = str_data[1]
+      str = str_data[:string]
 
       str = str.split("")
       str = str.map do |s|
@@ -259,7 +275,7 @@ module Nihonjin
       str.each do |s|
         new_str += s
       end
-      new_str.encode(str_data[0])
+      new_str.encode(str_data[:encoding].name)
     end
 
     # #kuhaku_invertの文字列を破壊的に変換します
@@ -286,7 +302,10 @@ module Nihonjin
     def utf_8_pass(str)
       original_encoding = str.encoding
       str = str.encode("UTF-8")
-      str_data = [original_encoding, str]
+      str_data = {
+        string: str,
+        encoding: original_encoding
+      }
     end
 
     # 再帰的に対象の文字列に「っ」が何個か続いたら、「っ」の次の文字の（ローマ字の）子音を見つけて「っ」と代えます。

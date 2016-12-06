@@ -117,6 +117,13 @@ describe Nihonjin::Moji do
       end
     end
 
+    #context 'まっっっっっっっっっって' do
+    #  it ' changes' do
+    #    new_str = moji.hiragana("matttttttttttttttte")
+    #    expect(new_str).to eq("まって")
+    #  end
+    #end
+
     context 'カタカナの場合' do
       it 'うまく変換されること' do
         new_str = moji.hiragana(katakana_str)
@@ -139,18 +146,18 @@ describe Nihonjin::Moji do
     end
 
     context '小さい「っ」が入るはず場合' do
-      it 'うまく変換される' do
+      it 'うまく変換されること' do
         new_str = moji.hiragana(small_tsu_str)
         expect(new_str).to eq("ちいさい　つ　あった　よ！　あった！")
       end
     end
 
-    #context '小さい文字' do
-    #  it 'x を入力したら文字が小さくなる' do
-    #    new_str = moji.hiragana("umaku ikeru kanaxa")
-    #    expect(new_str).to eq("うまく　いける　かなぁ")
-    #  end
-    #end
+    context 'x を入れる時' do
+      it 'うまく変換されること' do
+        new_str = moji.hiragana("umaku ugoketara iinaxa")
+        expect(new_str).to eq("うまく　うごけたら　いいなぁ")
+      end
+    end
 
     context 'ミューテイトしない場合' do
       it '変数はミューテイトしないこと' do
