@@ -1,4 +1,5 @@
 require 'nkf'
+require 'nihonjin/constants'
 
 module Nihonjin
 
@@ -25,7 +26,7 @@ module Nihonjin
       tu: "つ",
 
       ka: "か", ki: "き", ku: "く", ke: "け", ko: "こ",
-      sa: "さ", si: "し", shi: "し", si: "し", su: "す", se: "せ", so: "そ",
+      sa: "さ", shi: "し", si: "し", su: "す", se: "せ", so: "そ",
       ta: "た", chi: "ち", te: "て", to: "と",
       na: "な", ni: "に", nu: "ぬ", ne: "ね", no: "の",
       ha: "は", hi: "ひ", fu: "ふ", he: "へ", ho: "ほ",
@@ -53,13 +54,6 @@ module Nihonjin
       ya: "ゃ",          yu: "ゅ",           yo: "ょ",
       a: "ぁ", i: "ぃ", u: "ぅ", e: "ぇ", o: "ぉ",
       tsu: "っ"
-    }
-
-    EncodingTypes = {
-      utf_8: '-w',
-      shift_jis: '-s',
-      iso_2022_jp: '-j',
-      euc: '-e'
     }
 
     Consonants = ["bb", "cc", "dd", "ff", "gg", "hh", "jj", "kk", "ll", "pp", "qq", "rr", "ss", "tt", "vv", "ww", "yy", "zz"]
