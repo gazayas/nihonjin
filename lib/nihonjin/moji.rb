@@ -133,11 +133,8 @@ module Nihonjin
 
     def katakana(str, *options)
       str = hiragana(str, options)
-      options = setup options
-      str_data = utf_8_pass(str)
-      str = str_data[:string]
-      str = NKF.nkf(('-h2 ' + options), str)
-      str = str.encode(str_data[:encoding].name) if options.empty?
+      str = general_nkf_pass(str, '-h2', options)
+      # str = str.encode(str_data[:encoding].name) if options.empty?
       str
     end
 
@@ -149,11 +146,8 @@ module Nihonjin
 
     def hankaku_katakana(str, *options)
       str = katakana(str, options)
-      options = setup options
-      str_data = utf_8_pass(str)
-      str = str_data[:string]
-      str = NKF.nkf(('-Z4 ' + options), str)
-      str = str.encode(str_data[:encoding].name) if options.empty?
+      str = general_nkf_pass(str, '-Z4', options)
+      # str = str.encode(str_data[:encoding].name) if options.empty?
       str
     end
 
@@ -197,7 +191,7 @@ module Nihonjin
       str = kuhaku(str)
 
       # str = str.encode(str_data[:encoding].name) # ローマ字はshift_jisに変換できるかな...
-      str.encode(str_data[:encoding].name)
+      # str.encode(str_data[:encoding].name)
 
     end
 
@@ -208,10 +202,8 @@ module Nihonjin
 
     def kana_invert(str, *options)
       options = setup options
-      str_data = utf_8_pass(str)
-      str = str_data[:string]
-      str = NKF.nkf(('-h3 ' + options), str)
-      str = str.encode(str_data[:encoding].name) if options.empty?
+      str = general_nkf_pass(str, options, '-h3')
+      # str = str.encode(str_data[:encoding].name) if options.empty?
       str
     end
 
@@ -311,7 +303,16 @@ module Nihonjin
       options
     end
 
-    def general_nkf_pass(str, *options)
+    # specific_optionは'-h2'、'-Z4'などのことを差します
+    # 上記のメソッドで文字列、オプションのリテラル、そしてそれ以外のオプションを定義するだけで、
+    # nkfの関数が呼び出されます
+    def general_nkf_pass(str, specific_option, *options)
+      options = setup options
+      str_data = utf_8_pass(str)
+      str = str_data[:string]
+      str = NKF.nkf((specific_option + ' ' + options), str)
+      # str = str.encode(str_data[:encoding].name) if options.empty?
+      str
     end
 
     # utf-8でない文字列の対応としては、元のエンコーディングとutf-8バージョンの文字列を配列に格納して返します
