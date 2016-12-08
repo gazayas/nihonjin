@@ -154,8 +154,8 @@ describe Nihonjin::Moji do
 
     context 'x を入れる時' do
       it 'うまく変換されること' do
-        new_str = moji.hiragana("umaku ugoketara iinaxa")
-        expect(new_str).to eq("うまく　うごけたら　いいなぁ")
+        new_str = moji.hiragana("umaku ugoketara iinaxaxa")
+        expect(new_str).to eq("うまく　うごけたら　いいなぁぁ")
       end
     end
 

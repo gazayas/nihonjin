@@ -93,14 +93,20 @@ module Nihonjin
 
       # 「x」を文字の前に入れることで、自由に小さいひらがなを定義することができる
       if str =~ /x/
-        place = str =~ /x/
-        str[place + 1] = Small_hiragana[Hiragana.key(str[place + 1])]
-        str[place] = ""
+        i = 0
+        str_ary = str.split("")
+        str_ary.each do |s|
+          if s =~ /x/
+            str[i + 1] = Small_hiragana[Hiragana.key(str[i + 1])]
+          end
+          i += 1
+        end
+        str = str.gsub("x", "")
       end
 
       # consonantsのコードで小さい「っ」の対応ができるけど、全部は変換されません
       # 子音が残ってしまえば、変換されます。
-      if str =~ /([a-z])/
+      if str =~ /[a-z]/
         i = 0
         str_ary = str.split("")
         str_ary.each do |s|
