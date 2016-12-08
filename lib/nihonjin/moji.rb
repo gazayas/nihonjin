@@ -1,5 +1,5 @@
 require 'nkf'
-require 'nihonjin/constants'
+require 'nihonjin/options'
 
 module Nihonjin
 
@@ -112,7 +112,7 @@ module Nihonjin
       
       # if options.include?(EncodingTypes.each) これは明らかに違うけどwwとにかくそれっぽい動作をしたいww
       # 次の行はダメだな
-      str.encode(str_data[:encoding].name) unless custom_options || str_data[:encoding] != "UTF-8"
+      # str.encode(str_data[:encoding].name) unless custom_options || str_data[:encoding] != "UTF-8"
 
       # raise error if str =~ /[a-zA-Z]/
 
@@ -159,8 +159,7 @@ module Nihonjin
 
     def romaji(str, encoding=:utf_8)
 
-      # すべての文字をひらがなに統一してからローマ字に変換されます
-      # カタカナなどが入っている時の対応
+      # すべての文字をひらがなに統一してからローマ字に変換されます。カタカナなどが入っている時の対応
       str = hiragana(str, encoding)
 
       str_data = utf_8_pass(str)
