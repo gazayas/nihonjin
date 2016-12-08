@@ -62,16 +62,16 @@ module Nihonjin
     # ところで[0]の方は英字で[1]の方は日本語
     Symbols = [[".", "。"], ["!", "！"], ["?", "？"], [",", "、"]]
 
-    # NKFのオプションを#hiraganaの方で定義すれば、Moji.hiragana()を呼ぶだけで文字列が簡単に変換されます
-    # たのしいRuby299ページを参照してください
+    # 対象の文字列をnkfで、ひらがなに変換します。たのしいRuby299ページを参照してください
     def hiragana(str, *options)
       
+      custom_options = true unless options.empty?
       options = setup options
       str_data = utf_8_pass(str)
       str = str_data[:string]
       str = str.downcase
 
-      # "matte"みたいな文字列を「まって」に変えるために
+      # "matte"みたいな文字列を「まって」に変換します
       Consonants.each do |c|
         if str.match(c)
           str = str.gsub(c, ("っ" + c[0]))
@@ -108,11 +108,11 @@ module Nihonjin
       end
 
       str = kuhaku(str, :zenkaku)
-
       str = NKF.nkf(('-h1 ' + options), str)
-
-      # もしoptionsを定義しなかったら、文字列のオリジナルの文字コードにします
-      str.encode(str_data[:encoding].name) if options.empty?
+      
+      # if options.include?(EncodingTypes.each) これは明らかに違うけどwwとにかくそれっぽい動作をしたいww
+      # 次の行はダメだな
+      str.encode(str_data[:encoding].name) unless custom_options || str_data[:encoding] != "UTF-8"
 
       # raise error if str =~ /[a-zA-Z]/
 
