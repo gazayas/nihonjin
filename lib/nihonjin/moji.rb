@@ -60,7 +60,7 @@ module Nihonjin
 
     # これはちょっと見にくいから直せばいい
     # ところで[0]の方は英字で[1]の方は日本語
-    Symbols = [[".", "。"], ["!", "！"], ["?", "？"], [",", "、"]]
+    Symbols = [[".", "。"], ["!", "！"], ["?", "？"], [",", "、"], ["~", "〜"]]
 
     # 対象の文字列をnkfで、ひらがなに変換します。たのしいRuby299ページを参照してください
     def hiragana(str, *options)
@@ -98,14 +98,21 @@ module Nihonjin
         str[place] = ""
       end
 
-      # while文が良くないかもしれない
-      # 最後に/([a-zA-Z])/にマッチしてしまったらエラーを返したいけど、
-      # while文だと、もしそのエラーを生じるはずのものが次のwhile文に入っていたら、
-      # while文を出ることはない。それは困る。
-      while str =~ /([a-zA-Z])/
-        place = str =~ (/[a-zA-Z]/)
-        romaji_to_small_tsu(str, place)
+      # consonantsのコードで小さい「っ」の対応ができるけど、全部は変換されません
+      # 子音が残ってしまえば、変換されます。
+      if str =~ /([a-z])/
+        i = 0
+        str_ary = str.split("")
+        str_ary.each do |s|
+          if s =~ /っ/
+            str[i + 1] = "っ" if str[i + 1] =~ /[a-z]/
+          end
+          i += 1
+        end
       end
+
+      # この時点で if /[a-z/、エラーをthrowしてください
+      # raise error if str =~ /[a-zA-Z]/
 
       str = kuhaku(str, :zenkaku)
       str = NKF.nkf(('-h1 ' + options), str)
@@ -113,8 +120,6 @@ module Nihonjin
       # if options.include?(EncodingTypes.each) これは明らかに違うけどwwとにかくそれっぽい動作をしたいww
       # 次の行はダメだな
       # str.encode(str_data[:encoding].name) unless custom_options || str_data[:encoding] != "UTF-8"
-
-      # raise error if str =~ /[a-zA-Z]/
 
       str
 
@@ -179,6 +184,14 @@ module Nihonjin
       while str =~ /っ/
         place = str =~ /っ/
         small_tsu_to_romaji(str, place)
+      end
+
+      # 上記のHiragana.eachと重複しているのでProcを作ってHiraganaやSmall_hiraganaを引数として渡すかな
+      Small_hiragana.each do |key, value|
+        re = Regexp.new(value)
+        if str.match(re)
+          str = str.gsub(re, key.to_s)
+        end
       end
 
       str = kuhaku(str)
@@ -298,6 +311,9 @@ module Nihonjin
       options
     end
 
+    def general_nkf_pass(str, *options)
+    end
+
     # utf-8でない文字列の対応としては、元のエンコーディングとutf-8バージョンの文字列を配列に格納して返します
     # #hiraganaとかのメソッドの処理が終われば、文字列の元のエンコーディングに戻します。
     def utf_8_pass(str)
@@ -320,19 +336,6 @@ module Nihonjin
         else # びっくりマークなどの場合
           str[place] = ""
         end
-      end
-    end
-
-    # 動くけど動作が気になる
-    # できたら変えた方がいいかもしれない
-    # -1 じゃなくて + 1
-    def romaji_to_small_tsu(str, place)
-      if str[place - 1] =~ /っ/
-        str[place] = "っ"
-      elsif str[place - 1] == str[place] # 同じローマ字が続く場合
-        romaji_to_small_tsu(str, (place - 1))
-      elsif str[place + 1] == nil # "akkk"は「あっk」になってしまう。#hiraganaでエラーをraiseするように
-        str[place]
       end
     end
 

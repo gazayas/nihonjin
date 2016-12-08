@@ -117,12 +117,12 @@ describe Nihonjin::Moji do
       end
     end
 
-    #context 'まっっっっっっっっっって' do
-    #  it ' changes' do
-    #    new_str = moji.hiragana("matttttttttttttttte")
-    #    expect(new_str).to eq("まって")
-    #  end
-    #end
+    context 'まっっっっっっっっっっっっっっって' do
+      it ' changes' do
+        new_str = moji.hiragana("matttttttttttttttte")
+        expect(new_str).to eq("まっっっっっっっっっっっっっっって")
+      end
+    end
 
     context 'カタカナの場合' do
       it 'うまく変換されること' do
@@ -325,21 +325,16 @@ describe Nihonjin::Moji do
     let(:hiragana_str) { 'にんげん　の　ごじゅうねん　は　はかない　もの　だ。' }
     let(:romaji_str) { 'ningen no gojuunen ha hakanai mono da.' }
 
+    let(:recursion_string) { "どっっっっかん！" }
+    let(:recursion_string2) { "やっっちゃっった！" }
+    let(:recursion_string3) { "ちょっ！まてよ！" }
+
     context 'ローマ字に変換されること' do
       it 'うまく変換されること' do
         new_str = moji.romaji(hiragana_str)
         expect(new_str).to eq(romaji_str)
       end
     end
-
-  end
-
-
-  describe '#romaji!' do
-
-    let(:recursion_string) { "どっっっっかん！" }
-    let(:recursion_string2) { "やっっちゃっった！" }
-    let(:recursion_string3) { "ちょっ！まてよ！" }
 
     context 'ローマ字に変換されること' do
       it '再起をテストすること' do
@@ -362,6 +357,17 @@ describe Nihonjin::Moji do
       end
     end
 
+    context 'Small_hiraganaが変換されること' do
+      it 'うまく変換されること' do
+        new_str = moji.romaji("まって　よぉ〜")
+        expect(new_str).to eq("matte yoo~")
+      end
+    end
+
+  end
+
+
+  describe '#romaji!' do
   end
 
 
