@@ -148,18 +148,19 @@ describe Nihonjin::Moji do
     # #hiragana!でoptionsが二重してしまうから次のテストは大事です
     context 'オプションを渡す場合' do
       it '別のリテラルとしてうまく定義されること' do
-        new_str = moji.hiragana!(katakana_str, '-s', '--mac')
+        moji.hiragana!(katakana_str, '-s', '--mac')
         shift_jis_str = shift_jis(katakana_str)
-        expect(new_str.encoding).to eq(shift_jis_str.encoding)
+        expect(katakana_str.encoding).to eq(shift_jis_str.encoding)
       end
       it '１つのリテラルとしてうまく定義されること' do
-        new_str = moji.hiragana!(katakana_str, '-s --mac')
+        moji.hiragana!(katakana_str, '-s --mac')
         shift_jis_str = shift_jis(katakana_str)
-        expect(new_str.encoding).to eq(shift_jis_str.encoding)
+        expect(katakana_str.encoding).to eq(shift_jis_str.encoding)
       end
     end
 
   end
+
 
 
   describe '#katakana' do
@@ -188,7 +189,6 @@ describe Nihonjin::Moji do
 
   end
 
-
   describe '#katakana!' do
 
     let(:romaji_str) { 'ningen no gojuunen ha hakanai mono da.' }
@@ -205,18 +205,19 @@ describe Nihonjin::Moji do
     # #katakana!でoptionsが二重（三重？）してしまうから次のテストは大事です
     context 'オプションを渡す場合' do
       it '別のリテラルとしてうまく定義されること' do
-        new_str = moji.katakana!(romaji_str, '-s', '--mac')
+        moji.katakana!(romaji_str, '-s', '--mac')
         shift_jis_str = shift_jis(romaji_str)
-        expect(new_str.encoding).to eq(shift_jis_str.encoding)
+        expect(romaji_str.encoding).to eq(shift_jis_str.encoding)
       end
       it '１つのリテラルとしてうまく定義されること' do
-        new_str = moji.katakana!(romaji_str, '-s --mac')
+        moji.katakana!(romaji_str, '-s --mac')
         shift_jis_str = shift_jis(romaji_str)
-        expect(new_str.encoding).to eq(romaji_str.encoding)
+        expect(romaji_str.encoding).to eq(romaji_str.encoding)
       end
     end
 
   end
+
 
 
   describe '#hankaku_katakana' do
@@ -250,7 +251,6 @@ describe Nihonjin::Moji do
 
   end
 
-
   describe '#hankaku_katakana!' do
 
     let(:hiragana_str) { 'にんげん　の　ごじゅうねん　は　はかない　もの　だ。' }
@@ -266,18 +266,19 @@ describe Nihonjin::Moji do
 
     context 'オプションを渡す場合' do
       it '別のリテラルとしてうまく定義されること' do
-        new_str = moji.hankaku_katakana!(hiragana_str, '-s', '--mac')
+        moji.hankaku_katakana!(hiragana_str, '-s', '--mac')
         shift_jis_str = shift_jis(hiragana_str)
-        expect(new_str.encoding).to eq(shift_jis_str.encoding)
+        expect(hiragana_str.encoding).to eq(shift_jis_str.encoding)
       end
       it '１つのリテラルとしてうまく定義されること' do
-        new_str = moji.hankaku_katakana!(hiragana_str, '-s --mac')
+        moji.hankaku_katakana!(hiragana_str, '-s --mac')
         shift_jis_str = shift_jis(hiragana_str)
-        expect(new_str.encoding).to eq(hiragana_str.encoding)
+        expect(hiragana_str.encoding).to eq(hiragana_str.encoding)
       end
     end
 
   end
+
 
 
   describe '#romaji' do
@@ -328,7 +329,6 @@ describe Nihonjin::Moji do
 
   end
 
-
   describe '#romaji!' do
 
     let(:hiragana_str) { 'にんげん　の　ごじゅうねん　は　はかない　もの　だ。' }
@@ -343,6 +343,7 @@ describe Nihonjin::Moji do
     end
 
   end
+
 
 
   describe '#kana_invert' do
@@ -371,7 +372,6 @@ describe Nihonjin::Moji do
 
   end
 
-
   describe '#kana_invert!' do
 
     let(:hiragana_str) { 'にんげん　の　ごじゅうねん　は　はかない　もの　だ。' }
@@ -387,18 +387,19 @@ describe Nihonjin::Moji do
 
     context 'オプションを渡す場合' do
       it '別のリテラルとしてうまく定義されること' do
-        new_str = moji.kana_invert!(hiragana_str, '-s', '--mac')
+        moji.kana_invert!(hiragana_str, '-s', '--mac')
         shift_jis_str = shift_jis(hiragana_str)
-        expect(new_str.encoding).to eq(shift_jis_str.encoding)
+        expect(hiragana_str.encoding).to eq(shift_jis_str.encoding)
       end
       it '１つのリテラルとしてうまく定義されること' do
         new_str = moji.kana_invert!(hiragana_str, '-s --mac')
         shift_jis_str = shift_jis(hiragana_str)
-        expect(new_str.encoding).to eq(hiragana_str.encoding)
+        expect(hiragana_str.encoding).to eq(hiragana_str.encoding)
       end
     end
 
   end
+
 
 
   describe '#kiru' do
@@ -430,7 +431,6 @@ describe Nihonjin::Moji do
     end
   end
 
-
   describe '#kiru!' do
 
     let(:zenkaku_kiru_str) { '　この　空白　は　全角　だけ　'}
@@ -443,6 +443,7 @@ describe Nihonjin::Moji do
       end
     end
   end
+
 
 
   describe '#hashigiri' do
@@ -474,33 +475,9 @@ describe Nihonjin::Moji do
     end
   end
 
-
   describe '#hashigiri!' do
 
-    let(:hankaku_hashigiri_str) { ' 半角の空白 ' }
     let(:zenkaku_hashigiri_str) { '　全角の空白　' }
-    let(:kuhaku_invert_str) { '　左は全角の空白で、右は半角 ' }
-
-    context '半角だけの場合' do
-      it '端が切られること' do
-        new_str = moji.hashigiri(hankaku_hashigiri_str)
-        expect(new_str).to_not match(/^\s\s$/)
-      end
-    end
-
-    context '全角だけの場合' do
-      it '端が切られること' do
-        new_str = moji.hashigiri(zenkaku_hashigiri_str)
-        expect(new_str).to_not match(/^　　$/)
-      end
-    end
-
-    context 'ミックスの場合' do
-      it '端が切られること' do
-        new_str = moji.hashigiri(kuhaku_invert_str)
-        expect(new_str).to_not match(/^　\s$/)
-      end
-    end
 
     context 'ミューテイトする場合' do
       it 'うまくミューテイトされること' do
@@ -509,7 +486,9 @@ describe Nihonjin::Moji do
         expect(zenkaku_hashigiri_str.__id__).to eq original_id
       end
     end
+
   end
+
 
 
   describe '#kuhaku' do
@@ -545,7 +524,19 @@ describe Nihonjin::Moji do
   end
 
   describe '#kuhaku!' do
+
+    let(:zenkaku_str) { '全角　ばっかり　です　ね' }
+
+    context 'ミューテイトする場合' do
+      it 'うまくミューテイトされること' do
+        original_id = zenkaku_str.__id__
+        moji.kuhaku!(zenkaku_str)
+        expect(original_id).to eq(zenkaku_str.__id__)
+      end
+    end
+
   end
+
 
 
   describe '#kuhaku_invert' do
