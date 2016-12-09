@@ -252,7 +252,7 @@ module Nihonjin
 
 
 
-    # 対象の文字列の空白を全角の空白にします
+    # 対象の文字列の空白を半角の空白にします
     # :zenkakuをoptionとして渡せば、すべての空白は全角の空白に変換されます
     def kuhaku(str, option=nil)
       str_data = utf_8_pass(str)
@@ -302,8 +302,8 @@ module Nihonjin
 
     private
 
-    # optionsの中で新しい文字コードを定義すれば、nkfは文字列をそのエンコーディングにする
-    # 定義していなければ、元のエンコーディングに変える必要があります
+    # optionsの中で新しい文字コードを定義すれば、nkfは文字列をそのエンコーディングにします
+    # 定義していなければ、元のエンコーディングに変える必要がありますとtrueを返します
     def check_encoding(*options)
       options = options.flatten if options.class == Array
       need_to_change_encoding = true
@@ -329,8 +329,7 @@ module Nihonjin
     end
 
     # utf-8でない文字列の対応としては、元のエンコーディングとutf-8バージョンの文字列を配列に格納して返します。
-    # #hiraganaとかのメソッドの処理が終われば、文字列の元のエンコーディングに戻します
-    # （エンコーディングを変えるオプションが定義していなければ）
+    # #hiraganaとかのメソッドの処理が終われば、必要であれば、文字列の元のエンコーディングに戻します
     def utf_8_pass(str)
       original_encoding = str.encoding
       str = str.encode("UTF-8")
