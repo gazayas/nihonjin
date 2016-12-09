@@ -2,7 +2,10 @@
 
 日本語をもっと気楽に扱うためのgemです:octocat:
 
-※まだ公開していません
+##インストール
+```
+$ gem install nihonjin
+```
 
 ## Moji 文字
 
