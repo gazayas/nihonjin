@@ -65,7 +65,7 @@ module Nihonjin
     # 対象の文字列をnkfで、ひらがなに変換します。たのしいRuby299ページを参照してください
     def hiragana(str, *options)
       
-      custom_options = true unless options.empty?
+      need_to_change_encoding = check_encoding(options)
       options = setup options
       str_data = utf_8_pass(str)
       str = str_data[:string]
@@ -117,15 +117,15 @@ module Nihonjin
         end
       end
 
-      # この時点で if /[a-z/、エラーをthrowしてください
+      # この時点で if /[a-z]/、エラーをthrowしてください
       # raise error if str =~ /[a-zA-Z]/
 
       str = kuhaku(str, :zenkaku)
       str = NKF.nkf(('-h1 ' + options), str)
-      
+
       # if options.include?(EncodingTypes.each) これは明らかに違うけどwwとにかくそれっぽい動作をしたいww
       # 次の行はダメだな
-      # str.encode(str_data[:encoding].name) unless custom_options || str_data[:encoding] != "UTF-8"
+      str = str.encode(str_data[:encoding].name) if need_to_change_encoding
 
       str
 
@@ -140,7 +140,6 @@ module Nihonjin
     def katakana(str, *options)
       str = hiragana(str, options)
       str = general_nkf_pass(str, '-h2', options)
-      # str = str.encode(str_data[:encoding].name) if options.empty?
       str
     end
 
@@ -153,7 +152,6 @@ module Nihonjin
     def hankaku_katakana(str, *options)
       str = katakana(str, options)
       str = general_nkf_pass(str, '-Z4', options)
-      # str = str.encode(str_data[:encoding].name) if options.empty?
       str
     end
 
@@ -164,6 +162,9 @@ module Nihonjin
 
 
     def romaji(str, encoding=:utf_8)
+
+      need_to_change_encoding = check_encoding(encoding)
+      str_data = utf_8_pass(str)
 
       # すべての文字をひらがなに統一してからローマ字に変換されます。カタカナなどが入っている時の対応
       str = hiragana(str, encoding)
@@ -198,9 +199,8 @@ module Nihonjin
       end
 
       str = kuhaku(str)
-
-      # str = str.encode(str_data[:encoding].name) # ローマ字はshift_jisに？
-      # str.encode(str_data[:encoding].name)
+      str = str.encode(str_data[:encoding].name) if need_to_change_encoding
+      str
 
     end
 
@@ -213,7 +213,6 @@ module Nihonjin
     def kana_invert(str, *options)
       options = setup options
       str = general_nkf_pass(str, '-h3', options)
-      # str = str.encode(str_data[:encoding].name) if options.empty?
       str
     end
 
@@ -305,6 +304,21 @@ module Nihonjin
 
     private
 
+    # optionsの中で新しい文字コードを定義すれば、nkfは文字列をそのエンコーディングにする
+    # 定義していなければ、元のエンコーディングに変える必要があります
+    def check_encoding(*options)
+      options = options.flatten if options.class == Array
+      need_to_change_encoding = true
+      options.each do |option|
+        EncodingTypes.each do |key, val|
+          if option == key || option =~ Regexp.new(val)
+            need_to_change_encoding = false
+          end
+        end
+      end
+      need_to_change_encoding
+    end
+
     def setup(options)
       options = options.flatten
       options = options.map do |option|
@@ -332,16 +346,17 @@ module Nihonjin
     # 上記のメソッドで文字列、オプションのリテラル、そしてそれ以外のオプションを定義するだけで、
     # nkfの関数が呼び出されます
     def general_nkf_pass(str, specific_option, *options)
+      need_to_change_encoding = check_encoding(options)
       options = setup options
       str_data = utf_8_pass(str)
       str = str_data[:string]
       str = NKF.nkf((specific_option + ' ' + options), str)
-      # str = str.encode(str_data[:encoding].name) if options.empty?
+      str = str.encode(str_data[:encoding].name) if need_to_change_encoding
       str
     end
 
     # 再帰的に対象の文字列に「っ」が何個か続いたら、「っ」の次の文字の（ローマ字の）子音を見つけて「っ」と代えます。
-    # 「どっっかん！」を書いたら「dokkkan!」になる
+    # 「どっっっかん！」を書いたら「dokkkkan!」になる
     def small_tsu_to_romaji(str, place)
       if str[place + 1] =~ /[a-zA-Z]/
         str[place] = str[place + 1]
