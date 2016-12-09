@@ -32,7 +32,7 @@ moji.kiru("余計な　空白　を　切り落とす")
 # 出力コードもシンボルとして定義できます
 moji.hiragana("hiragana ni naru.", :shift_jis)
 #=> "\x{82D0}\x{82E7}\x{82AA}\x{82C8}\x{8140}\x{82C9}\x{8140}\x{82C8}\x{82E9}\x{8142}"
-moji::EncodingTypes
+Nihonjin::EncodingTypes
 #=> {:utf_8=>"-w", :shift_jis=>"-s", :iso_2022_jp=>"-j", :euc=>"-e"}
 
 # リテラルも渡すことができます

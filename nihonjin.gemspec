@@ -9,9 +9,10 @@ Gem::Specification.new do |spec|
   spec.authors       = ["gazayas"]
   spec.email         = ["g-zayas@hotmail.com"]
 
-  spec.summary       = %q{TODO: Write a short summary, because Rubygems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.summary       = "handle Japanese<=>English letter strings with ease"
+  spec.description   = "Ruby has the NKF.nkf() method, but the options are unclear by just looking at them, "
+                        + "so this gem has methods like hiragana() so you know what you're changing your strings to"
+  spec.homepage      = "https://github.com/gazayas/nihonjin"
 
   # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or
   # delete this section to allow pushing this gem to any host.
