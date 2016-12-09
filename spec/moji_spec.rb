@@ -39,6 +39,9 @@ describe Nihonjin::Moji do
     end
   end
 
+  describe '#kuhaku!' do
+  end
+
 
   describe '#kuhaku_invert' do
 
@@ -70,6 +73,20 @@ describe Nihonjin::Moji do
          expect(new_str.length).to eq(4)
        end
      end
+  end
+
+  describe '#kuhaku_invert!' do
+
+    let(:kuhaku_invert_str) { '　左は全角の空白で、右は半角 ' }
+
+    context 'ミューテイトする場合' do
+      it 'うまくミューテイトされること' do
+        original_id = kuhaku_invert_str.__id__
+        moji.kuhaku_invert!(kuhaku_invert_str)
+        expect(kuhaku_invert_str.__id__).to eq original_id
+      end
+    end
+
   end
 
 
@@ -317,10 +334,37 @@ describe Nihonjin::Moji do
 
 
   describe '#hankaku_katakana!' do
+
+    let(:hiragana_str) { 'にんげん　の　ごじゅうねん　は　はかない　もの　だ。' }
+    let(:hankaku_katakana_str) { 'ﾆﾝｹﾞﾝ　ﾉ　ｺﾞｼﾞｭｳﾈﾝ　ﾊ　ﾊｶﾅｲ　ﾓﾉ　ﾀﾞ｡' }
+
+    context 'ミューテイトする場合' do
+      it 'うまくミューテイトされること' do
+        original_id = hiragana_str.__id__
+        moji.hankaku_katakana!(hiragana_str)
+        expect(hiragana_str.__id__).to eq original_id
+      end
+    end
+
+    context 'オプションを渡す場合' do
+      it '別のリテラルとしてうまく定義されること' do
+        new_str = moji.hankaku_katakana!(hiragana_str, '-s', '--mac')
+        shift_jis_str = shift_jis(hiragana_str)
+        expect(new_str.encoding).to eq(shift_jis_str.encoding)
+      end
+      it '１つのリテラルとしてうまく定義されること' do
+        new_str = moji.hankaku_katakana!(hiragana_str, '-s --mac')
+        shift_jis_str = shift_jis(hiragana_str)
+        expect(new_str.encoding).to eq(hiragana_str.encoding)
+      end
+    end
+
   end
 
 
   describe '#romaji' do
+
+    # encodingのテストも書かないといけないikenai
 
     let(:hiragana_str) { 'にんげん　の　ごじゅうねん　は　はかない　もの　だ。' }
     let(:romaji_str) { 'ningen no gojuunen ha hakanai mono da.' }
@@ -368,6 +412,19 @@ describe Nihonjin::Moji do
 
 
   describe '#romaji!' do
+
+    let(:hiragana_str) { 'にんげん　の　ごじゅうねん　は　はかない　もの　だ。' }
+    let(:romaji_str) { 'ningen no gojuunen ha hakanai mono da.' }
+
+    context 'ミューテイトする場合' do
+      it 'うまくミューテイトされること' do
+        original_id = hiragana_str.__id__
+        moji.romaji!(hiragana_str)
+        expect(hiragana_str.__id__).to eq original_id
+      end
+    end
+
+
   end
 
 

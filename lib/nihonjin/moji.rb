@@ -158,6 +158,7 @@ module Nihonjin
     end
 
     def hankaku_katakana!(str, *options)
+      str.sub!(str, (hankaku_katakana(str, options)))
     end
 
 
@@ -166,6 +167,7 @@ module Nihonjin
 
       # すべての文字をひらがなに統一してからローマ字に変換されます。カタカナなどが入っている時の対応
       str = hiragana(str, encoding)
+      str = str.downcase
 
       str_data = utf_8_pass(str)
       str = str_data[:string]
@@ -181,6 +183,7 @@ module Nihonjin
         str = str.gsub(symbol[1], symbol[0])
       end
 
+      # while文はちょっと気になる
       while str =~ /っ/
         place = str =~ /っ/
         small_tsu_to_romaji(str, place)
@@ -196,25 +199,26 @@ module Nihonjin
 
       str = kuhaku(str)
 
-      # str = str.encode(str_data[:encoding].name) # ローマ字はshift_jisに変換できるかな...
+      # str = str.encode(str_data[:encoding].name) # ローマ字はshift_jisに？
       # str.encode(str_data[:encoding].name)
 
     end
 
     def romaji!(str, encoding=:utf_8)
+      str.sub!(str, (romaji(str, encoding)))
     end
 
 
 
     def kana_invert(str, *options)
       options = setup options
-      str = general_nkf_pass(str, options, '-h3')
+      str = general_nkf_pass(str, '-h3', options)
       # str = str.encode(str_data[:encoding].name) if options.empty?
       str
     end
 
     def kana_invert!(str, *options)
-      str = str.sub!(str, (kana_invert(str, options)))
+      str.sub!(str, (kana_invert(str, options)))
     end
 
 
@@ -227,7 +231,7 @@ module Nihonjin
     end
 
     def kiru!(str)
-      str = str.sub(str, kiru(str))
+      str.sub!(str, kiru(str))
     end
 
 
@@ -243,7 +247,7 @@ module Nihonjin
     end
 
     def hashigiri!(str)
-      str = str.sub(str, hashigiri(str))
+      str.sub!(str, hashigiri(str))
     end
 
 
@@ -265,11 +269,13 @@ module Nihonjin
 
     # #kuhakuの文字列を破壊的に変換します
     def kuhaku!(str, option=nil)
+      str.sub!(str, kuhaku(str))
     end
 
 
     # 対象の文字列の全角と半角の空白を逆にします
     def kuhaku_invert(str)
+
       str_data = utf_8_pass(str)
       str = str_data[:string]
 
@@ -292,6 +298,7 @@ module Nihonjin
 
     # #kuhaku_invertの文字列を破壊的に変換します
     def kuhaku_invert!(str)
+      str.sub!(str, kuhaku_invert(str))
     end
 
 
@@ -309,6 +316,18 @@ module Nihonjin
       options
     end
 
+    # utf-8でない文字列の対応としては、元のエンコーディングとutf-8バージョンの文字列を配列に格納して返します。
+    # #hiraganaとかのメソッドの処理が終われば、文字列の元のエンコーディングに戻します
+    # （エンコーディングを変えるオプションが定義していなければ）
+    def utf_8_pass(str)
+      original_encoding = str.encoding
+      str = str.encode("UTF-8")
+      str_data = {
+        string: str,
+        encoding: original_encoding
+      }
+    end
+
     # specific_optionは'-h2'、'-Z4'などのことを差します
     # 上記のメソッドで文字列、オプションのリテラル、そしてそれ以外のオプションを定義するだけで、
     # nkfの関数が呼び出されます
@@ -319,17 +338,6 @@ module Nihonjin
       str = NKF.nkf((specific_option + ' ' + options), str)
       # str = str.encode(str_data[:encoding].name) if options.empty?
       str
-    end
-
-    # utf-8でない文字列の対応としては、元のエンコーディングとutf-8バージョンの文字列を配列に格納して返します
-    # #hiraganaとかのメソッドの処理が終われば、文字列の元のエンコーディングに戻します。
-    def utf_8_pass(str)
-      original_encoding = str.encoding
-      str = str.encode("UTF-8")
-      str_data = {
-        string: str,
-        encoding: original_encoding
-      }
     end
 
     # 再帰的に対象の文字列に「っ」が何個か続いたら、「っ」の次の文字の（ローマ字の）子音を見つけて「っ」と代えます。
