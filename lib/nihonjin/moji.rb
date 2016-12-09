@@ -34,7 +34,7 @@ module Nihonjin
       ya: "や",           yu: "ゆ",          yo: "よ",
       ra: "ら", ri: "り", ru: "る", re: "れ", ro: "ろ",
       wa: "わ", wi: "ゐ",           we: "ゑ", wo: "を",
-      n: "ん", n_: "ん", # 「n_」はんい（範囲）とかを書くために。Issue #16を見てください
+      n: "ん", n_: "ん", # 「n_」というのは、「はんい」みたいな言葉を書くためです。Issue #16を見てください
 
       va: "ゔぁ", vi: "ゔぃ", vu: "ゔ", ve: "ゔぇ", vo: "ゔぉ",
       ga: "が", gi: "ぎ", gu: "ぐ", ge: "げ", go: "ご",
@@ -86,11 +86,6 @@ module Nihonjin
         end
       end
 
-      # びっくりマークなどの記号を日本語の文字にします
-      Symbols.each do |symbol|
-        str = str.gsub(symbol[0], symbol[1])
-      end
-
       # 「x」を文字の前に入れることで、小さいひらがなを定義することができます
       if str =~ /x/
         i = 0
@@ -115,6 +110,11 @@ module Nihonjin
           end
           i += 1
         end
+      end
+
+      # びっくりマークなどの記号を日本語の文字にします
+      Symbols.each do |symbol|
+        str = str.gsub(symbol[0], symbol[1])
       end
 
       # この時点で if /[a-z]/、エラーをthrowしてください
@@ -181,16 +181,16 @@ module Nihonjin
       str_data = utf_8_pass(str)
       str = str_data[:string]
 
-      Hiragana.each do |key, value|
-        re = Regexp.new(value)
-        if str.match(re)
-          str = str.gsub(re, key.to_s)
+      change_to = Proc.new do |hash|
+        hash.each do |key, value|
+          re = Regexp.new(value)
+          if str.match(re)
+            str = str.gsub(re, key.to_s)
+          end
         end
       end
 
-      Symbols.each do |symbol|
-        str = str.gsub(symbol[1], symbol[0])
-      end
+      change_to.call(Hiragana)
 
       # while文はちょっと気になる
       while str =~ /っ/
@@ -198,12 +198,11 @@ module Nihonjin
         small_tsu_to_romaji(str, place)
       end
 
-      # 上記のHiragana.eachと重複しているのでProcを作ってHiraganaやSmall_hiraganaを引数として渡すかな
-      Small_hiragana.each do |key, value|
-        re = Regexp.new(value)
-        if str.match(re)
-          str = str.gsub(re, key.to_s)
-        end
+      # ダブっている文字が小さい「っ」に変換されてからしないといけません
+      change_to.call(Small_hiragana)
+
+      Symbols.each do |symbol|
+        str = str.gsub(symbol[1], symbol[0])
       end
 
       str = kuhaku(str)
