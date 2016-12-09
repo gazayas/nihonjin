@@ -138,7 +138,7 @@ module Nihonjin
 
     def katakana(str, *options)
       str = hiragana(str, options)
-      str = general_nkf_pass(str, '-h2', options)
+      str = nkf_pass(str, '-h2', options)
     end
 
     def katakana!(str, *options)
@@ -149,7 +149,7 @@ module Nihonjin
 
     def hankaku_katakana(str, *options)
       str = katakana(str, options)
-      str = general_nkf_pass(str, '-Z4', options)
+      str = nkf_pass(str, '-Z4', options)
     end
 
     def hankaku_katakana!(str, *options)
@@ -160,7 +160,7 @@ module Nihonjin
 
     def kana_invert(str, *options)
       options = setup options
-      str = general_nkf_pass(str, '-h3', options)
+      str = nkf_pass(str, '-h3', options)
     end
 
     def kana_invert!(str, *options)
@@ -344,7 +344,7 @@ module Nihonjin
     # specific_optionは'-h2'、'-Z4'などのことを差します
     # 上記のメソッドで文字列、オプションのリテラル、そしてそれ以外のオプションを定義するだけで、
     # nkfの関数が呼び出されます
-    def general_nkf_pass(str, specific_option, *options)
+    def nkf_pass(str, specific_option, *options)
       need_to_change_encoding = check_encoding(options)
       options = setup options
       str_data = utf_8_pass(str)
