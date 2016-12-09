@@ -62,7 +62,7 @@ module Nihonjin
     # ところで[0]の方は英字で[1]の方は日本語
     Symbols = [[".", "。"], ["!", "！"], ["?", "？"], [",", "、"], ["~", "〜"]]
 
-    # 対象の文字列をnkfで、ひらがなに変換します。たのしいRuby299ページを参照してください
+    # 対象の文字列をnkfで、ひらがなに変換します。#nkf_passと「たのしいRuby」299ページを参照してください
     def hiragana(str, *options)
       
       need_to_change_encoding = check_encoding(options)
@@ -78,7 +78,7 @@ module Nihonjin
         end
       end
 
-      # 対象の文字列にはローマ字がある場合
+      # 対象の文字列にはローマ字がある場合ひらがなに変換します
       Hiragana.each do |key, value|
         re = Regexp.new(key.to_s)
         if str.match(re)
@@ -86,12 +86,12 @@ module Nihonjin
         end
       end
 
-      # びっくりマークなどを日本語の文字にします
+      # びっくりマークなどの記号を日本語の文字にします
       Symbols.each do |symbol|
         str = str.gsub(symbol[0], symbol[1])
       end
 
-      # 「x」を文字の前に入れることで、自由に小さいひらがなを定義することができる
+      # 「x」を文字の前に入れることで、小さいひらがなを定義することができます
       if str =~ /x/
         i = 0
         str_ary = str.split("")
@@ -104,7 +104,7 @@ module Nihonjin
         str = str.gsub("x", "")
       end
 
-      # consonantsのコードで小さい「っ」の対応ができるけど、全部は変換されません
+      # 上記Consonants.eachのコードで重なっている文字は小さい「っ」に変換されるけど、全部は変換されません
       # 子音が残ってしまえば、変換されます。
       if str =~ /[a-z]/
         i = 0
@@ -120,13 +120,12 @@ module Nihonjin
       # この時点で if /[a-z]/、エラーをthrowしてください
       # raise error if str =~ /[a-zA-Z]/
 
-      str = kuhaku(str, :zenkaku)
+      # これは要るかどうか工夫すること
+      # またオプションとしては定義できるようにしたらいいかどうか工夫すること
+      str = kuhaku(str, :zenkaku) 
+
       str = NKF.nkf(('-h1 ' + options), str)
-
-      # if options.include?(EncodingTypes.each) これは明らかに違うけどwwとにかくそれっぽい動作をしたいww
-      # 次の行はダメだな
       str = str.encode(str_data[:encoding].name) if need_to_change_encoding
-
       str
 
     end
@@ -140,7 +139,6 @@ module Nihonjin
     def katakana(str, *options)
       str = hiragana(str, options)
       str = general_nkf_pass(str, '-h2', options)
-      str
     end
 
     def katakana!(str, *options)
@@ -152,7 +150,6 @@ module Nihonjin
     def hankaku_katakana(str, *options)
       str = katakana(str, options)
       str = general_nkf_pass(str, '-Z4', options)
-      str
     end
 
     def hankaku_katakana!(str, *options)
@@ -164,7 +161,6 @@ module Nihonjin
     def kana_invert(str, *options)
       options = setup options
       str = general_nkf_pass(str, '-h3', options)
-      str
     end
 
     def kana_invert!(str, *options)
