@@ -161,6 +161,18 @@ module Nihonjin
 
 
 
+    def kana_invert(str, *options)
+      options = setup options
+      str = general_nkf_pass(str, '-h3', options)
+      str
+    end
+
+    def kana_invert!(str, *options)
+      str.sub!(str, (kana_invert(str, options)))
+    end
+
+
+
     def romaji(str, encoding=:utf_8)
 
       need_to_change_encoding = check_encoding(encoding)
@@ -209,19 +221,13 @@ module Nihonjin
     end
 
 
+    #################################
+    #                               #
+    # 以降は空白を扱うためのメソッドです #
+    #                               #
+    #################################
 
-    def kana_invert(str, *options)
-      options = setup options
-      str = general_nkf_pass(str, '-h3', options)
-      str
-    end
-
-    def kana_invert!(str, *options)
-      str.sub!(str, (kana_invert(str, options)))
-    end
-
-
-
+    # 対象の文字列のすべての空白を切り落とす
     def kiru(str)
       if str.match(/　/)
         str = str.gsub(/　/, " ")
@@ -234,7 +240,7 @@ module Nihonjin
     end
 
 
-
+    # 対象の文字列の端にある空白を切り落とす
     def hashigiri(str)
       if str.match(/^　/)
         str = str.sub(/^　/, " ")
@@ -256,7 +262,6 @@ module Nihonjin
     def kuhaku(str, option=nil)
       str_data = utf_8_pass(str)
       str = str_data[:string]
-
       # :double というオプションを入れたい。nkfの-Z2のこと
       if option == :zenkaku
         str = str.gsub(/\s/, "　") # 全角に変える
@@ -274,10 +279,8 @@ module Nihonjin
 
     # 対象の文字列の全角と半角の空白を逆にします
     def kuhaku_invert(str)
-
       str_data = utf_8_pass(str)
       str = str_data[:string]
-
       str = str.split("")
       str = str.map do |s|
         if s =~ /\s/ # 半角であれば
