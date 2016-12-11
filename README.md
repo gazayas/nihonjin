@@ -9,7 +9,7 @@ $ gem install nihonjin
 
 ## Moji 文字
 
-### いちいちnkfのオプションを調べるのは面倒くさいから、`Moji`で簡単に定義することができます
+### いちいちnkfのオプションを調べるのはちょっと面倒でなのて、`Moji`で簡単に定義することができます
 ```ruby
 moji = Nihonjin::Moji.new
 moji.hiragana("hiragana ni naru.")
