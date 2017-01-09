@@ -64,7 +64,7 @@ module Nihonjin
 
     # 対象の文字列をnkfで、ひらがなに変換します。#nkf_passと「たのしいRuby」299ページを参照してください
     def hiragana(str, *options)
-      
+
       need_to_change_encoding = check_encoding(options)
       options = setup options
       str_data = utf_8_pass(str)
@@ -89,7 +89,7 @@ module Nihonjin
       # 「x」を文字の前に入れることで、小さいひらがなを定義することができます
       if str =~ /x/
         i = 0
-        str_ary = str.split("")
+        str_ary = str.split("") # こうじゃなくて str.length.times do |str| ... end でいいかな
         str_ary.each do |s|
           if s =~ /x/
             str[i + 1] = Small_hiragana[Hiragana.key(str[i + 1])]
@@ -122,7 +122,7 @@ module Nihonjin
 
       # これは要るかどうか工夫すること
       # またオプションとしては定義できるようにしたらいいかどうか工夫すること
-      str = kuhaku(str, :zenkaku) 
+      str = kuhaku(str, :zenkaku)
 
       str = NKF.nkf(('-h1 ' + options), str)
       str = str.encode(str_data[:encoding].name) if need_to_change_encoding
