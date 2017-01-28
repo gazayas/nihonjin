@@ -1,6 +1,7 @@
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require 'nihonjin'
 
+# 文字コードのヘルバー
 def utf_8(str)
   str = str.encode('UTF-8')
 end
@@ -15,4 +16,9 @@ end
 
 def euc_jp(str)
   str = str.encode("EUC-JP")
+end
+
+# idを取得するためのメソッド
+def id_of(str)
+  str.__id__
 end
