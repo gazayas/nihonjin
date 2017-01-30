@@ -2,54 +2,68 @@ require 'spec_helper'
 
 describe Nihonjin::Suji do
 
-  let(:suji_inst) { Nihonjin::Suji.new }
+  let(:suji) { Nihonjin::Suji.new }
 
-  # 次は kanji_henkanが返すような値を整数にすること...
-  context 'to_iは整数を返すこと' do
-    it '整数は整数を返すこと' do
-      suji = suji_inst.to_i(10)
-      expect(suji).to eq 10
+  describe '#to_i' do
+    subject { suji.to_i(num) }
+    let(:expected_result) { 10 }
+
+    context '整数から整数' do
+      let(:num) { 10 }
+      it { is_expected.to eq expected_result}
     end
-    it '半角は整数を返すこと' do
-      suji = suji_inst.to_i("10")
-      expect(suji).to eq 10
+
+    context '文字列から整数' do
+      let(:num ) { "10" }
+      it { is_expected.to eq expected_result }
     end
-    it '全角は整数を返すこと' do
-      suji = suji_inst.to_i("１０")
-      expect(suji).to eq 10
+
+    context '全角の数字から整数' do
+      let(:num) { "１０" }
+      it { is_expected.to eq expected_result }
     end
-    it '漢字は整数を返すこと' do
-      suji = suji_inst.to_i("七九一")
-      expect(suji).to eq 791
+
+    context '漢字から整数' do
+      let(:num) { '一〇' }
+      it { is_expected.to eq expected_result }
     end
-    it '大字は整数を返すこと' do
-      suji = suji_inst.to_i("壱弐参")
-      expect(suji).to eq 123
+
+    context '大字から整数' do
+      let(:num) { '壱零' }
+      it { is_expected.to eq expected_result }
     end
   end
 
-  context 'typeを返すこと' do
-    it '整数であって"半角"を返す' do
-      type = suji_inst.type?(47)
-      expect(type).to eq "半角"
+  describe '#type?' do
+    subject { suji.type?(num) }
+
+    context '整数の場合' do
+      let(:num) { 10 }
+      it { is_expected.to eq "半角" }
     end
-    it '文字列であって"半角"を返すこと' do
-      type = suji_inst.type?("47")
-      expect(type).to eq "半角"
+
+    context '整数の文字列の場合' do
+      let(:num) { "10" }
+      it { is_expected.to eq "半角" }
     end
-    it '"全角"を返すこと' do
-      type = suji_inst.type?("４７")
-      expect(type).to eq "全角"
+
+    context '全角の整数の場合' do
+      let(:num) { "１０" }
+      it { is_expected.to eq "全角" }
     end
-    it '"漢字"を返すこと' do
-      type = suji_inst.type?("四七")
-      expect(type).to eq "漢字"
+
+    context '漢字の場合' do
+      let(:num) { "一〇" }
+      it { is_expected.to eq "漢字" }
     end
-    it '"大字"を返すこと' do
-      type = suji_inst.type?("肆漆")
+
+    context '大字の場合' do
+      let(:num) { "壱零" }
+      it { is_expected.to eq "大字" }
     end
   end
 
+=begin
   # 全てのtypeから全てのtypeに変換されるようなテストを書いた方がいいかも知らない（０＿０）大変かもしれないwww
   context '全角に変換するテスト' do
     it '半角から変換されること' do
@@ -227,5 +241,5 @@ describe Nihonjin::Suji do
       expect(suji).to eq "五千六百京四千二百二十三兆七千四百六十二億七千三百三十七万三千五百六十五"
     end
   end
-
+=end
 end
