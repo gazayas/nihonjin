@@ -47,7 +47,6 @@ moji.hiragana("hiragana ni naru.", "-w --mac")
 
 
 ##Suji 数字
-今はSujiが少しだけできてる<br/>
 次のメソッドでは、どんな値でも入れていい<br/><br/>
 
 ```ruby
